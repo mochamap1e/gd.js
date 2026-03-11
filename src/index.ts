@@ -1,7 +1,8 @@
-// https://wyliemaster.github.io/gddocs/#/endpoints
+// https://wyliemaster.github.io/gddocs/#/endpoints/endpoints
 
 import fs from "fs";
-import { Elysia, status } from "elysia";
+import axios from "axios";
+import { Elysia } from "elysia";
 
 const PORT = 4500;
 
@@ -13,16 +14,50 @@ new Elysia({
         }
     }
 })
-    .post("*", ({ request, body }) => {
-        const endpoint = new URL(request.url).pathname.replace("/", "");
-        console.log("path:", endpoint, "Body:", body);
+    .post("*", async ({ request, body }) => {
+        const endpoint = new URL(request.url).pathname.replace("/", "").replace(".php", "")
 
+        console.log("path:", endpoint);
+
+        console.log("request:", request);
+        console.log("body:", body);
+
+        const response = await axios.post(`https://www.boomlings.com/database/${endpoint}.php`, body,
+            {
+                headers: {
+                    "User-Agent": "",
+                    "Content-Type": "application/x-www-form-urlencoded"
+                }
+            }
+        );
+
+        const data = await response.data;
+
+        console.log("GD response:", data);
+
+        return data;
+
+        /*
         switch (endpoint) {
-            case "getGJDailyLevel.php": // Returns the index of the current daily level and the time left in seconds, separated by a pipe.
+            case "getGJDailyLevel": // Returns the index of the current daily level and the time left in seconds, separated by a pipe.
                 return "1|1";
             default:
-                break;
+                const response = await fetch(`https://www.boomlings.com/database/${endpoint}`, {
+                    method: "POST",
+                    headers: {
+                        "User-Agent": "",
+                        "Content-Type": "application/x-www-form-urlencoded"
+                    },
+                    body: body as any
+                });
+
+                const responseText = await response.text();
+
+                console.log("GD response:", responseText);
+
+                return responseText;
         }
+        */
     })
     .listen(PORT);
 
