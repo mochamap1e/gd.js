@@ -15,27 +15,32 @@ new Elysia({
     }
 })
     .post("*", async ({ request, body }) => {
-        const endpoint = new URL(request.url).pathname.replace("/", "").replace(".php", "")
+        const endpoint = new URL(request.url).pathname.replace("/", "").replace(".php", "");
+        const url = `http://www.boomlings.com/database/${endpoint}.php`;
 
         console.log("path:", endpoint);
-
-        console.log("request:", request);
+        console.log("url:", url);
         console.log("body:", body);
 
-        const response = await axios.post(`https://www.boomlings.com/database/${endpoint}.php`, body,
-            {
+        body = new URLSearchParams(Object.fromEntries(Object.entries(body).map(([key, value]) => [key, Array.isArray(value) ? value.join(",") : value]))).toString();
+
+        try {
+            const response = await axios.post(url, body, {
+                validateStatus: () => true,
                 headers: {
                     "User-Agent": "",
                     "Content-Type": "application/x-www-form-urlencoded"
                 }
-            }
-        );
+            });
 
-        const data = await response.data;
-
-        console.log("GD response:", data);
-
-        return data;
+            const code = await response.status;
+            console.log("GD response code:", code);
+            console.log("GD response data:", response.data)
+            return response.data;
+        } catch(error) {
+            console.error(error);
+            return null;
+        }
 
         /*
         switch (endpoint) {

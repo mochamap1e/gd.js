@@ -1,5 +1,5 @@
 {
-    "name": "node-gdps",
+    "name": "gd.js",
     "type": "module",
     "private": true,
     "scripts": {

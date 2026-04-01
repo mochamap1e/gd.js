@@ -1,3 +1,3 @@
-# node-gdps
+# gd.js
 
-Geometry Dash private server made in Node.
+Geometry Dash private server made in JavaScript
