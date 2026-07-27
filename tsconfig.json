@@ -18,5 +18,6 @@
         "noUnusedLocals": false,
         "noUnusedParameters": false,
         "noPropertyAccessFromIndexSignature": false
-    }
+    },
+    "include": ["src", "src/types/*.d.ts"]
 }

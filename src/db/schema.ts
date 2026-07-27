@@ -1,70 +1,70 @@
-import { pgTable, integer, varchar, boolean } from "drizzle-orm/pg-core";
+import { pgTable, serial, integer, varchar, boolean } from "drizzle-orm/pg-core";
 
-export const userTable = pgTable("user", {
+export const user = pgTable("user", {
     // ids
-    account_id: integer().notNull().primaryKey(),
-    user_id: integer().notNull(),
+    account_id: serial().notNull().primaryKey(),
+    user_id: serial().notNull(),
 
     // creds
-    username: varchar({ length: 15 }).notNull(),
-    email: varchar().notNull(),
+    username: varchar({ length: 15 }).unique().notNull(),
+    email: varchar().unique().notNull(),
     password: varchar().notNull(),
-    custom: varchar().notNull(),
-    is_registered: boolean().notNull(),
+    custom: varchar(),
+    is_registered: boolean().notNull().default(true),
 
     // stats
-    stars: integer().notNull(),
-    moons: integer().notNull(),
-    diamonds: integer().notNull(),
-    demon_count: integer().notNull(),
-    ranking: integer().notNull(),
-    creator_points: integer().notNull(),
-    secret_coins: integer().notNull(),
-    user_coins: integer().notNull(),
-    global_rank: integer().notNull(),
+    stars: integer().notNull().default(0),
+    moons: integer().notNull().default(0),
+    diamonds: integer().notNull().default(0),
+    demon_count: integer().notNull().default(0),
+    creator_points: integer().notNull().default(0),
+    secret_coins: integer().notNull().default(0),
+    user_coins: integer().notNull().default(0),
+    ranking: integer().notNull().default(999999),
+    global_rank: integer().notNull().default(999999),
 
     // levels
-    demons: varchar().notNull(),
-    classic_levels: varchar().notNull(),
-    platformer_levels: varchar().notNull(),
+    demons: varchar().notNull().default("0,0,0,0,0,0,0,0,0,0,0,0"),
+    classic_levels: varchar().notNull().default("0,0,0,0,0,0,0,0"),
+    platformer_levels: varchar().notNull().default("0,0,0,0,0,0"),
 
     // icons
-    icon_id: integer().notNull(),
-    icon_type: integer().notNull(),
-    color: integer().notNull(),
-    color2: integer().notNull(),
-    color3: integer().notNull(),
-    acc_icon: integer().notNull(),
-    acc_ship: integer().notNull(),
-    acc_ball: integer().notNull(),
-    acc_bird: integer().notNull(),
-    acc_dart: integer().notNull(),
-    acc_robot: integer().notNull(),
-    acc_spider: integer().notNull(),
-    acc_swing: integer().notNull(),
-    acc_jetpack: integer().notNull(),
-    acc_streak: integer().notNull(),
-    acc_glow: boolean().notNull(),
-    acc_explosion: boolean().notNull(),
-    special: integer().notNull(),
+    icon_id: integer().notNull().default(1),
+    icon_type: integer().notNull().default(0),
+    color: integer().notNull().default(0),
+    color2: integer().notNull().default(3),
+    color3: integer().notNull().default(0),
+    acc_icon: integer().notNull().default(1),
+    acc_ship: integer().notNull().default(1),
+    acc_ball: integer().notNull().default(1),
+    acc_bird: integer().notNull().default(1),
+    acc_dart: integer().notNull().default(1),
+    acc_robot: integer().notNull().default(1),
+    acc_spider: integer().notNull().default(1),
+    acc_swing: integer().notNull().default(1),
+    acc_jetpack: integer().notNull().default(1),
+    acc_streak: integer().notNull().default(1),
+    acc_glow: boolean().notNull().default(false),
+    acc_explosion: integer().notNull().default(1),
+    special: integer().notNull().default(0),
 
     // social
-    message_state: integer().notNull(),
-    friends_state: integer().notNull(),
-    comment_history_state: integer().notNull(),
-    youtube: varchar().notNull(),
-    twitter: varchar().notNull(),
-    twitch: varchar().notNull(),
-    discord: varchar().notNull(),
-    instagram: varchar().notNull(),
-    tiktok: varchar().notNull(),
+    message_state: integer().notNull().default(0),
+    friends_state: integer().notNull().default(0),
+    comment_history_state: integer().notNull().default(0),
+    youtube: varchar().notNull().default(""),
+    twitter: varchar().notNull().default(""),
+    twitch: varchar().notNull().default(""),
+    discord: varchar().notNull().default(""),
+    instagram: varchar().notNull().default(""),
+    tiktok: varchar().notNull().default(""),
 
     // other
-    mod: integer().notNull(),
-    account_highlight: varchar().notNull(),
+    mod: integer().notNull().default(0),
+    account_highlight: varchar().notNull().default(""),
 });
 
-export const levelTable = pgTable("level", {
+export const level = pgTable("level", {
     level_id: integer().notNull().primaryKey(),
     level_name: varchar({ length: 20 }).notNull(),
     description: varchar(),
@@ -119,7 +119,7 @@ export const levelTable = pgTable("level", {
     exact_update_time: integer().notNull()
 });
 
-export const listTable = pgTable("list", {
+export const list = pgTable("list", {
     list_id: integer().notNull().primaryKey(),
     list_name: varchar({ length: 25 }).notNull(),
     description: varchar(),
@@ -130,9 +130,8 @@ export const listTable = pgTable("list", {
     rated: boolean().notNull(),
     upload_date: varchar().notNull(),
     update_date: varchar().notNull(),
-    account_id: integer().references(() => userTable.account_id).notNull(),
-    username: varchar().references(() => userTable.username).notNull(),
-    level_ids: integer().references(() => levelTable.level_id).array().notNull(),
+    account_id: integer().references(() => user.account_id).notNull(),
+    level_ids: integer().references(() => level.level_id).array().notNull(),
     list_reward: integer().notNull(),
     list_reward_requirement: integer().notNull()
 });

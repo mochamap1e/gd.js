@@ -4,7 +4,9 @@
     "type": "module",
     "scripts": {
         "start": "bun src/index.ts",
-        "dev": "bun --watch src/index.ts"
+        "dev": "bun --watch src/index.ts",
+        "push": "bunx drizzle-kit push",
+        "studio": "bunx drizzle-kit studio"
     },
     "dependencies": {
         "dotenv": "^17.4.2",
