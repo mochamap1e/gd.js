@@ -1,11 +1,17 @@
+import crypto from "crypto";
 import { Elysia, t } from "elysia";
 
 import { db } from "../../db/client";
 import { user } from "../../db/schema";
-import { secrets, generateGJP2 } from "../../utils/secrets";
-import { GDError, GDRegisterError, TypeError } from "../../utils/errors";
+import { auth } from "../../utils/macros";
+import { TypeError, GDError, GDAccountError } from "../../utils/errors";
+
+function generateGJP2(string: string) {
+    return crypto.createHash("sha1").update(string += "mI29fmAnxgTs").digest("hex");
+}
 
 export const registerGJAccount = new Elysia()
+    .use(auth)
     .post("/registerGJAccount.php", async ({ body }) => {
         let { userName, password, email } = body;
 
@@ -25,9 +31,9 @@ export const registerGJAccount = new Elysia()
             if (constraint) {
                 switch (constraint) {
                     case "user_username_unique":
-                        return GDRegisterError.UsernameTaken;
+                        return GDAccountError.UsernameTaken;
                     case "user_email_unique":
-                        return GDRegisterError.EmailTaken;
+                        return GDAccountError.EmailTaken;
                     default:
                         return GDError.Generic;
                 }
@@ -38,19 +44,9 @@ export const registerGJAccount = new Elysia()
             return GDError.Generic;
         }
     }, {
+        accountSecret: true,
+        username: true,
         body: t.Object({
-            userName: t.String({
-                minLength: 3,
-                maxLength: 15,
-                error({ errors }) {
-                    const error = errors[0]; if (!error) return GDError.Generic;
-
-                    if (error.type === TypeError.StringTooShort) return GDRegisterError.UsernameTooShort;
-                    if (error.type === TypeError.StringTooLong) return GDRegisterError.UsernameTooLong;
-
-                    return GDError.Generic;
-                }
-            }),
             password: t.String({
                 minLength: 6,
                 maxLength: 20,
@@ -58,8 +54,8 @@ export const registerGJAccount = new Elysia()
                 error({ errors }) {
                     const error = errors[0]; if (!error) return GDError.Generic;
 
-                    if (error.type === TypeError.StringTooShort) return GDRegisterError.PasswordTooShort;
-                    if (error.type === TypeError.StringTooLong || error.type === TypeError.PatternFail) return GDRegisterError.PasswordInvalid;
+                    if (error.type === TypeError.StringTooShort) return GDAccountError.PasswordTooShort;
+                    if (error.type === TypeError.StringTooLong || error.type === TypeError.PatternFail) return GDAccountError.PasswordInvalid;
 
                     return GDError.Generic;
                 }
@@ -70,11 +66,10 @@ export const registerGJAccount = new Elysia()
                 error({ errors }) {
                     const error = errors[0]; if (!error) return GDError.Generic;
 
-                    if (error.type === TypeError.StringTooLong || error.type === TypeError.PatternFail) return GDRegisterError.EmailInvalid;
+                    if (error.type === TypeError.StringTooLong || error.type === TypeError.PatternFail) return GDAccountError.EmailInvalid;
 
                     return GDError.Generic;
                 }
-            }),
-            secret: t.Literal(secrets.account, { error() { return GDError.Generic; } })
+            })
         })
     });

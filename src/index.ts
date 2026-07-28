@@ -3,8 +3,8 @@
 import fs from "fs";
 import { Elysia } from "elysia";
 
+import { common } from "./endpoints/common";
 import { accounts } from "./endpoints/accounts";
-import { users } from "./endpoints/users";
 
 new Elysia({
         serve: {
@@ -15,8 +15,8 @@ new Elysia({
         }
     })
 
+    .use(common)
     .use(accounts)
-    .use(users)
     
     .all("*", async ({ request, body }) => {
         console.log("Requested:", request.url);
