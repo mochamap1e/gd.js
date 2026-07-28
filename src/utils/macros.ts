@@ -11,6 +11,19 @@ function secret(secret: string) {
     })
 }
 
+const username = t.String({
+    minLength: 3,
+    maxLength: 15,
+    error({ errors }) {
+        const error = errors[0]; if (!error) return GDError.Generic;
+
+        if (error.type === TypeError.StringTooShort) return GDAccountError.UsernameTooShort;
+        if (error.type === TypeError.StringTooLong) return GDAccountError.UsernameTooLong;
+
+        return GDError.Generic;
+    }
+})
+
 export const auth = new Elysia()
     .macro({
         // secrets
@@ -20,22 +33,23 @@ export const auth = new Elysia()
         modSecret: { body: secret("Wmfp3879gc3") },
         adminSecret: { body: secret("Wmfx2878gb9") },
 
-        // account id
-        accountId: {
-            body: t.Object({
-                accountID: t.String()
-            })
-        },
-
-        // login
-        account: {
+        // auth
+        // some endpoints send the account id, some send the username, this works for both
+        requiresAuthentication: {
             async resolve({ body }) {
-                const { gjp2, accountID } = body as { gjp2: string, accountID: string }
+                const { gjp2, userName, accountID } = body as { gjp2: string, userName?: string, accountID?: string };
+
+                let equality;
+
+                // if both are provided it will resort to account id
+                if (!userName && !accountID) return;
+                if (userName) equality = eq(user.username, userName);
+                if (accountID) equality = eq(user.account_id, parseInt(accountID));
 
                 const query = await db
                     .select()
                     .from(user)
-                    .where(eq(user.account_id, parseInt(accountID)))
+                    .where(equality)
 
                 const userData = query[0]; if (!userData) return;
 
@@ -46,26 +60,15 @@ export const auth = new Elysia()
                 }
             },
             body: t.Object({
-                accountID: t.String(),
-                gjp2: t.String()
+                gjp2: t.String(),
+                userName: t.Optional(username),
+                accountID: t.Optional(t.String())
             })
         },
 
-        // username
         username: {
             body: t.Object({
-                userName: t.String({
-                    minLength: 3,
-                    maxLength: 15,
-                    error({ errors }) {
-                        const error = errors[0]; if (!error) return GDError.Generic;
-
-                        if (error.type === TypeError.StringTooShort) return GDAccountError.UsernameTooShort;
-                        if (error.type === TypeError.StringTooLong) return GDAccountError.UsernameTooLong;
-
-                        return GDError.Generic;
-                    }
-                })
+                userName: username
             })
         }
-    });
+    })

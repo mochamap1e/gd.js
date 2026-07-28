@@ -8,6 +8,5 @@ export const loginGJAccount = new Elysia()
         return `${account.account_id},${account.user_id}`;
     }, {
         accountSecret: true,
-        account: true,
-        username: true
+        requiresAuthentication: true
     })

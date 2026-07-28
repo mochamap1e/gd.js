@@ -103,7 +103,7 @@ export const level = pgTable("level", {
     coins: integer().notNull(),
     verified_coins: boolean().notNull(),
     stars_requested: integer().notNull(),
-    low_detail_mode: integer().notNull(),
+    low_detail_mode: boolean().notNull(),
     daily_number: integer(),
     epic: integer().notNull(),
     demon_difficulty: integer().notNull(),

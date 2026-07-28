@@ -1,8 +1,9 @@
 import { Elysia, t } from "elysia";
 
+import { createHash } from "../../utils/hash";
 import { auth } from "../../utils/macros";
 
-function encodeXor(data: string, key: string) {
+function xor(data: string, key: string) {
     let out = "";
 
     for (let i = 0; i < data.length; i++) {
@@ -15,7 +16,7 @@ function encodeXor(data: string, key: string) {
 }
 
 function randomString() {
-    const chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+    const chars = "1234567890qwertyuiopaqsdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM";
 
     let string = "";
 
@@ -26,24 +27,69 @@ function randomString() {
     return string;
 }
 
+function createChestRewards(
+    userId: number,
+    chk: string,
+    udid: string,
+    accountId: number,
+    smallTimeRemaining: number,
+    smallChestRewards: string,
+    smallChestId: number,
+    largeTimeRemaining: number,
+    largeChestRewards: string,
+    largeChestId: number,
+    rewardType: string
+) {
+    return `${userId}:${chk}:${udid}:${accountId}:${smallTimeRemaining}:${smallChestRewards}:` +
+        `${smallChestId}:${largeTimeRemaining}:${largeChestRewards}:${largeChestId}:${rewardType}`;
+}
+
+function chestRewardsToString(rewards: ChestRewards) {
+    return Object.values(rewards).join(",");
+}
+
 export const getGJRewards = new Elysia()
     .use(auth)
-    .post("/getGJRewards.php", ({ body }) => {
-        const data = randomString() + ;
+    .post("/getGJRewards.php", ({ body, account }) => {
+        let { chk, udid, rewardType } = body;
 
+        const xorKey = "59182";
 
+        chk = chk.slice(5); // remove random 5 chars
+        chk = atob(chk); // decode base64
+        chk = xor(chk, xorKey); // remove xor
 
+        const smallChestRewards: ChestRewards = { orbs: 5000, diamonds: 25, item1: 2, item2: 6 };
+        const largeChestRewards: ChestRewards = { orbs: 67, diamonds: 67, item1: 3, item2: 4 };
 
+        const rewardsData = createChestRewards(
+            account.user_id,
+            chk,
+            udid,
+            account.account_id,
+            0,
+            chestRewardsToString(smallChestRewards),
+            670,
+            0,
+            chestRewardsToString(largeChestRewards),
+            671,
+            rewardType
+        );
 
+        const plaintext = `${randomString()}:${rewardsData}`; // append random string
+        const xored = xor(plaintext, xorKey); // XOR
+        const encoded = Buffer.from(xored, "latin1").toString("base64url"); // to url safe base64
+        
+        const response = randomString() + encoded; // append random string again
+        const hash = createHash(encoded, "pC26fpYaQCtg"); // hash
 
-        const xor = encodeXor(data, "59182");
-
-        return randomString() + Buffer.from(xor, "binary").toString("base64url");
+        return `${response}|${hash}`;
     }, {
         commonSecret: true,
-        accountId: true,
-        gjp2: true,
+        requiresAuthentication: true,
         body: t.Object({
-            chk: t.String()
+            chk: t.String(),
+            udid: t.String(),
+            rewardType: t.String()
         })
     });

@@ -27,7 +27,7 @@ export const getGJUserInfo20 = new Elysia()
         }
     }, {
         commonSecret: true,
-        account: true,
+        requiresAuthentication: true,
         body: t.Object({
             targetAccountID: t.String()
         })
