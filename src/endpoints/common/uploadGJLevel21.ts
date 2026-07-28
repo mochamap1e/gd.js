@@ -1,5 +1,6 @@
 import { Elysia, t } from "elysia";
 import { randomInt } from "mathjs";
+import { eq } from "drizzle-orm";
 
 import { db } from "../../db/client";
 import { level } from "../../db/schema";
@@ -8,27 +9,70 @@ import { auth } from "../../utils/macros";
 
 export const uploadGJLevel21 = new Elysia()
     .use(auth)
-    .post("/uploadGJLevel21.php", async ({ body }) => {
-        console.log("Uploading:", body);
+    .post("/uploadGJLevel21.php", async ({ body, account }) => {
+        const submittedId = parseInt(body.levelID);
+
+        let data: typeof level.$inferInsert = {
+            game_version: parseInt(body.gameVersion),
+            player_id: parseInt(body.accountID!),
+            level_id: undefined!,
+            level_name: body.levelName,
+            description: body.levelDesc,
+            version: parseInt(body.levelVersion),
+            length: parseInt(body.levelLength),
+            official_song: parseInt(body.audioTrack),
+            auto: Boolean(parseInt(body.auto)),
+            password: body.password,
+            copied_id: parseInt(body.original),
+            two_player: Boolean(parseInt(body.twoPlayer)),
+            custom_song_id: parseInt(body.songID),
+            objects: parseInt(body.objects),
+            coins: parseInt(body.coins),
+            stars_requested: parseInt(body.requestedStars),
+            unlisted: parseInt(body.unlisted),
+            low_detail_mode: Boolean(parseInt(body.ldm)),
+            level_string: body.levelString,
+            editor_time: parseInt(body.wt),
+            editor_time_copies: parseInt(body.wt2),
+            verification_time: parseInt(body.ts),
+            exact_upload_time: Date.now()
+        }
 
         try {
-            await db.insert(level).values({
-                level_id: parseInt(body.levelID) === 0 ? randomInt(1000, 9999) : 0, // need to add level updating
-                level_name: body.levelName,
-                description: body.levelDesc,
-                version: body.levelVersion,
-                length: parseInt(body.levelLength),
-                official_song: parseInt(body.audioTrack),
-                auto: Boolean(body.auto),
-                password: body.password,
-                copied_id: parseInt(body.original),
-                two_player: Boolean(body.twoPlayer),
-                stars_requested: parseInt(body.requestedStars),
-                unlisted: parseInt(body.unlisted),
-                low_detail_mode: Boolean(body.ldm),
-                level_string: body.levelString,
-                // need to finish
-            });
+            if (submittedId === 0) {
+                // upload as new level
+                const id = randomInt(1000, 9999);
+
+                data.level_id = id;
+
+                await db.insert(level).values(data);
+
+                return id;
+            } else {
+                // update existing level
+                const equality = eq(level.level_id, submittedId);
+
+                const query = await db
+                    .select()
+                    .from(level)
+                    .where(equality);
+
+                const levelData = query[0]; if(!levelData) return GDError.Generic;
+
+                if (levelData.player_id === account.account_id) {
+                    data.level_id = submittedId;
+                    data.version = levelData.version + 1;
+
+                    await db
+                        .update(level)
+                        .set(data)
+                        .where(equality);
+
+                    return submittedId;
+                } else {
+                    return GDError.Generic;
+                }
+            }
         } catch(error) {
             console.log("Error uploading level:", error);
             return GDError.Generic;
@@ -55,10 +99,8 @@ export const uploadGJLevel21 = new Elysia()
             unlisted: t.String(),
             ldm: t.String(),
             levelString: t.String(),
-            seed2: t.String(),
             wt: t.String(),
             wt2: t.String(),
-            ts: t.String(),
-            lrs: t.String()
+            ts: t.String()
         })
     });
