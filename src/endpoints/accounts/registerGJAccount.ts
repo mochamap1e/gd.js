@@ -1,10 +1,11 @@
 import crypto from "crypto";
 import { Elysia, t } from "elysia";
 
-import { db } from "../../db/client";
-import { user } from "../../db/schema";
-import { auth } from "../../utils/macros";
-import { TypeError, GDError, GDAccountError } from "../../utils/errors";
+import { db } from "@/db/client";
+import { user } from "@/db/schema";
+import { auth } from "@/utils/macros";
+import { username } from "@/utils/types";
+import { TypeError, GDError, GDAccountError } from "@/utils/errors";
 
 function generateGJP2(string: string) {
     return crypto.createHash("sha1").update(string += "mI29fmAnxgTs").digest("hex");
@@ -45,8 +46,8 @@ export const registerGJAccount = new Elysia()
         }
     }, {
         accountSecret: true,
-        username: true,
         body: t.Object({
+            userName: username,
             password: t.String({
                 minLength: 6,
                 maxLength: 20,

@@ -3,26 +3,14 @@ import { eq } from "drizzle-orm";
 
 import { db } from "../db/client";
 import { user } from "../db/schema";
-import { TypeError, GDError, GDAccountError } from "./errors";
+import { GDError } from "./errors";
+import { username } from "./types";
 
 function secret(secret: string) {
     return t.Object({
         secret: t.Literal(secret, { error() { return GDError.Generic; } })
     })
 }
-
-const username = t.String({
-    minLength: 3,
-    maxLength: 15,
-    error({ errors }) {
-        const error = errors[0]; if (!error) return GDError.Generic;
-
-        if (error.type === TypeError.StringTooShort) return GDAccountError.UsernameTooShort;
-        if (error.type === TypeError.StringTooLong) return GDAccountError.UsernameTooLong;
-
-        return GDError.Generic;
-    }
-})
 
 export const auth = new Elysia()
     .macro({
@@ -63,12 +51,6 @@ export const auth = new Elysia()
                 gjp2: t.String(),
                 userName: t.Optional(username),
                 accountID: t.Optional(t.String())
-            })
-        },
-
-        username: {
-            body: t.Object({
-                userName: username
             })
         }
     })

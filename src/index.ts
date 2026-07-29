@@ -5,6 +5,7 @@ import { Elysia } from "elysia";
 
 import { common } from "./endpoints/common";
 import { accounts } from "./endpoints/accounts";
+import { GDError } from "./utils/errors";
 
 new Elysia({
         serve: {
@@ -21,7 +22,7 @@ new Elysia({
     .all("*", async ({ request, body }) => {
         console.log("Requested:", request.url);
         console.log("Body:", body);
-        return "-1";
+        return GDError.Generic;
     })
 
     .listen(4500, ({ port }) => console.log("Server running on port", port));

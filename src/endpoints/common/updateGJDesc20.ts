@@ -1,10 +1,10 @@
 import { Elysia, t } from "elysia";
 import { eq } from "drizzle-orm";
 
-import { db } from "../../db/client";
-import { level } from "../../db/schema";
-import { GDError } from "../../utils/errors";
-import { auth } from "../../utils/macros";
+import { db } from "@/db/client";
+import { level } from "@/db/schema";
+import { GDError } from "@/utils/errors";
+import { auth } from "@/utils/macros";
 
 export const updateGJDesc20 = new Elysia()
     .use(auth)

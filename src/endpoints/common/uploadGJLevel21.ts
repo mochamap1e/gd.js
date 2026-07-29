@@ -2,10 +2,10 @@ import { Elysia, t } from "elysia";
 import { randomInt } from "mathjs";
 import { eq } from "drizzle-orm";
 
-import { db } from "../../db/client";
-import { level } from "../../db/schema";
-import { GDError } from "../../utils/errors";
-import { auth } from "../../utils/macros";
+import { db } from "@/db/client";
+import { level } from "@/db/schema";
+import { GDError } from "@/utils/errors";
+import { auth } from "@/utils/macros";
 
 export const uploadGJLevel21 = new Elysia()
     .use(auth)

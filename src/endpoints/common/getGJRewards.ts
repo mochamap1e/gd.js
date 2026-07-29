@@ -1,51 +1,39 @@
 import { Elysia, t } from "elysia";
+import { randomInt } from "mathjs";
 
-import { createHash } from "../../utils/hash";
-import { auth } from "../../utils/macros";
+import { Key } from "@/utils/keys";
+import { auth } from "@/utils/macros";
+import { Salt } from "@/utils/salts";
+import { colonSeparated, commaSeparated, decodeChk, encodeRewardsData } from "@/utils/text";
 
-function xor(data: string, key: string) {
-    let out = "";
+const items = [1, 2, 3, 4, 5, 6, 10, 11, 12, 13, 14]; // 6 is key
 
-    for (let i = 0; i < data.length; i++) {
-        out += String.fromCharCode(
-            data.charCodeAt(i) ^ key.charCodeAt(i % key.length)
-        );
-    }
-
-    return out;
+const smallChestValues: ChestValues = {
+    minOrbs: 20,
+    maxOrbs: 50,
+    minDiamonds: 1,
+    maxDiamonds: 4,
+    minShards: 0,
+    maxShards: 1,
+    minKeys: 0,
+    maxKeys: 0,
+    delay: 3600
 }
 
-function randomString() {
-    const chars = "1234567890qwertyuiopaqsdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM";
-
-    let string = "";
-
-    for (let i = 0; i < 5; i++) {
-        string += chars[Math.floor(Math.random() * chars.length)];
-    }
-
-    return string;
+const largeChestValues: ChestValues = {
+    minOrbs: 100,
+    maxOrbs: 300,
+    minDiamonds: 4,
+    maxDiamonds: 15,
+    minShards: 1,
+    maxShards: 2,
+    minKeys: 0,
+    maxKeys: 0,
+    delay: 14400
 }
 
-function createChestRewards(
-    userId: number,
-    chk: string,
-    udid: string,
-    accountId: number,
-    smallTimeRemaining: number,
-    smallChestRewards: string,
-    smallChestId: number,
-    largeTimeRemaining: number,
-    largeChestRewards: string,
-    largeChestId: number,
-    rewardType: string
-) {
-    return `${userId}:${chk}:${udid}:${accountId}:${smallTimeRemaining}:${smallChestRewards}:` +
-        `${smallChestId}:${largeTimeRemaining}:${largeChestRewards}:${largeChestId}:${rewardType}`;
-}
-
-function chestRewardsToString(rewards: ChestRewards) {
-    return Object.values(rewards).join(",");
+function getRandomItem() {
+    return items[randomInt(0, items.length)];
 }
 
 export const getGJRewards = new Elysia()
@@ -53,37 +41,37 @@ export const getGJRewards = new Elysia()
     .post("/getGJRewards.php", ({ body, account }) => {
         let { chk, udid, rewardType } = body;
 
-        const xorKey = "59182";
+        chk = decodeChk(chk, Key.ChestReward);
 
-        chk = chk.slice(5); // remove random 5 chars
-        chk = atob(chk); // decode base64
-        chk = xor(chk, xorKey); // remove xor
+        const smallChestRewards: ChestRewards = {
+            orbs: randomInt(smallChestValues.minOrbs, smallChestValues.maxOrbs),
+            diamonds: randomInt(smallChestValues.minDiamonds, smallChestValues.maxDiamonds),
+            item1: getRandomItem(),
+            item2: getRandomItem()
+        };
 
-        const smallChestRewards: ChestRewards = { orbs: 5000, diamonds: 25, item1: 2, item2: 6 };
-        const largeChestRewards: ChestRewards = { orbs: 67, diamonds: 67, item1: 3, item2: 4 };
+        const largeChestRewards: ChestRewards = {
+            orbs: randomInt(largeChestValues.minOrbs, largeChestValues.maxOrbs),
+            diamonds: randomInt(largeChestValues.minDiamonds, largeChestValues.maxDiamonds),
+            item1: getRandomItem(),
+            item2: getRandomItem()
+        };
 
-        const rewardsData = createChestRewards(
+        const rewardsData = colonSeparated(
             account.user_id,
             chk,
             udid,
             account.account_id,
             0,
-            chestRewardsToString(smallChestRewards),
+            commaSeparated(smallChestRewards),
             670,
             0,
-            chestRewardsToString(largeChestRewards),
+            commaSeparated(largeChestRewards),
             671,
             rewardType
         );
 
-        const plaintext = `${randomString()}:${rewardsData}`; // append random string
-        const xored = xor(plaintext, xorKey); // XOR
-        const encoded = Buffer.from(xored, "latin1").toString("base64url"); // to url safe base64
-        
-        const response = randomString() + encoded; // append random string again
-        const hash = createHash(encoded, "pC26fpYaQCtg"); // hash
-
-        return `${response}|${hash}`;
+        return encodeRewardsData(rewardsData, Key.ChestReward, Salt.Reward);
     }, {
         commonSecret: true,
         requiresAuthentication: true,

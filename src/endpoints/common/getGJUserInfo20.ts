@@ -1,11 +1,11 @@
 import { Elysia, t } from "elysia";
 import { eq } from "drizzle-orm";
 
-import { db } from "../../db/client";
-import { user } from "../../db/schema";
-import { auth } from "../../utils/macros";
-import { GDError } from "../../utils/errors";
-import { createUserObject } from "../../utils/objects/user";
+import { db } from "@/db/client";
+import { user } from "@/db/schema";
+import { auth } from "@/utils/macros";
+import { GDError } from "@/utils/errors";
+import { createUserObject } from "@/utils/objects/user";
 
 export const getGJUserInfo20 = new Elysia()
     .use(auth)

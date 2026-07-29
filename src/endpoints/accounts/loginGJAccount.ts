@@ -1,6 +1,6 @@
 import { Elysia, t } from "elysia";
 
-import { auth } from "../../utils/macros";
+import { auth } from "@/utils/macros";
 
 export const loginGJAccount = new Elysia()
     .use(auth)
