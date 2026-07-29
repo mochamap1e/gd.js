@@ -22,7 +22,7 @@ export const getGJUserInfo20 = new Elysia()
 
             return createUserObject(targetUserData);
         } catch(error) {
-            console.error("");
+            console.error("Failed to get user info:", error);
             return GDError.Generic;
         }
     }, {

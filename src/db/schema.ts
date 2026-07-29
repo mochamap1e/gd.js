@@ -120,8 +120,19 @@ export const list = pgTable("list", {
     rated: boolean().notNull(),
     upload_date: varchar().notNull(),
     update_date: varchar().notNull(),
-    account_id: integer().references(() => user.account_id).notNull(),
-    level_ids: integer().references(() => level.level_id).array().notNull(),
+    account_id: integer().notNull().references(() => user.account_id),
+    level_ids: integer().notNull().references(() => level.level_id).array(),
     list_reward: integer().notNull(),
     list_reward_requirement: integer().notNull()
+});
+
+export const daily = pgTable("daily", {
+    index: integer().notNull().generatedAlwaysAsIdentity(),
+    level_id: integer().references(() => level.level_id),
+    next_level_id: integer().references(() => level.level_id)
+});
+
+export const dailyHistory = pgTable("daily_history", {
+    index: integer().notNull(),
+    level_id: integer().notNull().references(() => level.level_id)
 });

@@ -3,6 +3,8 @@
 import fs from "fs";
 import { Elysia } from "elysia";
 
+import { dailyLevelJob } from "./cron/dailyLevel";
+
 import { common } from "./endpoints/common";
 import { accounts } from "./endpoints/accounts";
 import { GDError } from "./utils/errors";
@@ -16,6 +18,8 @@ new Elysia({
         }
     })
 
+    .use(dailyLevelJob)
+    
     .use(common)
     .use(accounts)
     
