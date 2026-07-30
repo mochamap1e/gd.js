@@ -19,13 +19,13 @@ export function xor(data: string, key: string) {
     return out;
 }
 
-export function randomString() {
-    const chars = "1234567890qwertyuiopaqsdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM";
+export function randomString(chars: number) {
+    const alphabet = "1234567890qwertyuiopaqsdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM";
 
     let string = "";
 
-    for (let i = 0; i < 5; i++) {
-        string += chars[Math.floor(Math.random() * chars.length)];
+    for (let i = 0; i < chars; i++) {
+        string += alphabet[Math.floor(Math.random() * alphabet.length)];
     }
 
     return string;
@@ -35,12 +35,12 @@ export function colonSeparated(...args: any) {
     return args.join(":");
 }
 
-export function commaSeparated(...args: any) {
+export function charSeparated(char: string, ...args: any) {
     const dictionary = args[0];
     if ((dictionary !== null) && (typeof dictionary === "object")) {
-        return Object.values(dictionary).join(",");
+        return Object.values(dictionary).join(char);
     } else {
-        return args.join(",");
+        return args.join(char);
     }
 }
 
@@ -49,10 +49,10 @@ export function decodeChk(chk: string, xorKey: string) {
 }
 
 export function encodeRewardsData(data: string, key: string, salt: string) {
-    data = `${randomString()}:${data}`;
+    data = `${randomString(5)}:${data}`;
     const xored = xor(data, key); // xor
     const base64 = Buffer.from(xored, "latin1").toString("base64url"); // base64
     const hash = createHash(base64, salt); // hash
 
-    return `${randomString()}${base64}|${hash}`;
+    return `${randomString(5)}${base64}|${hash}`;
 }

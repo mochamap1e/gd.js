@@ -4,7 +4,7 @@ import { randomInt } from "mathjs";
 import { Key } from "@/utils/keys";
 import { auth } from "@/utils/macros";
 import { Salt } from "@/utils/salts";
-import { colonSeparated, commaSeparated, decodeChk, encodeRewardsData } from "@/utils/text";
+import { charSeparated, decodeChk, encodeRewardsData } from "@/utils/text";
 
 const items = [1, 2, 3, 4, 5, 6, 10, 11, 12, 13, 14]; // 6 is key
 
@@ -57,16 +57,17 @@ export const getGJRewards = new Elysia()
             item2: getRandomItem()
         };
 
-        const rewardsData = colonSeparated(
+        const rewardsData = charSeparated(
+            ":",
             account.user_id,
             chk,
             udid,
             account.account_id,
             0,
-            commaSeparated(smallChestRewards),
+            charSeparated(",", smallChestRewards),
             670,
             0,
-            commaSeparated(largeChestRewards),
+            charSeparated(",", largeChestRewards),
             671,
             rewardType
         );

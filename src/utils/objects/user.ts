@@ -55,7 +55,5 @@ export function createUserObject(userData: typeof user.$inferInsert) {
 
     map.forEach(data => response += `${data.key}:${data.value}:`);
 
-    console.log("response:", response);
-
     return response;
 }

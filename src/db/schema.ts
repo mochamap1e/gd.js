@@ -62,6 +62,18 @@ export const user = pgTable("user", {
     // other
     mod: integer().notNull().default(0),
     account_highlight: varchar().notNull().default(""),
+
+    // save file
+    save_data: varchar().notNull().default(""),
+    save_data_game_version: integer(),
+    save_data_binary_version: integer()
+});
+
+export const accountComment = pgTable("account_comment", {
+    user_id: integer().notNull().references(() => user.user_id),
+    comment: varchar().notNull(),
+    likes: integer().notNull().default(0),
+    dislikes: integer().notNull().default(0),
 });
 
 export const level = pgTable("level", {
