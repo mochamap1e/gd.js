@@ -1,25 +1,16 @@
 {
-    "name": "gd.js",
+    "name": "gdps",
     "private": true,
+    "version": "0.0.0",
     "type": "module",
+    "workspaces": ["panel", "server"],
     "scripts": {
-        "start": "bun src/index.ts",
-        "dev": "bun --watch src/index.ts",
-        "push": "bunx drizzle-kit push",
-        "studio": "bunx drizzle-kit studio"
-    },
-    "dependencies": {
-        "@elysia/cron": "^1.4.2",
-        "dayjs": "^1.11.21",
-        "dotenv": "^17.4.2",
-        "drizzle-orm": "^0.45.2",
-        "mathjs": "^15.2.0",
-        "pg": "^8.22.0"
+        "dev": "concurrently -n 'Server,Panel' 'cd server && bun --watch src/index.ts' 'cd panel && bun dev'",
+        "push": "cd server && bun push",
+        "studio": "cd server && bun studio"
     },
     "devDependencies": {
-        "@types/bun": "^1.3.14",
-        "@types/pg": "^8.20.0",
-        "drizzle-kit": "^0.31.10",
+        "concurrently": "^10.0.4",
         "elysia": "^1.4.29",
         "typescript": "^7.0.2"
     }

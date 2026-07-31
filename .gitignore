@@ -1,3 +1,20 @@
 node_modules
 .env
+
+# server
 *.pem
+
+cdn/*
+!cdn/.gitkeep
+
+cdn/music/*
+!cdn/music
+!cdn/music/.gitkeep
+!cdn/music/musiclibrary_version_02.txt
+
+cdn/sfx/*
+!cdn/sfx
+!cdn/sfx/.gitkeep
+
+# panel
+dist
