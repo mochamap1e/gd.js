@@ -2,7 +2,7 @@ import { Elysia, t } from "elysia";
 import { randomInt } from "mathjs";
 
 import { Key } from "@/server/utils/keys";
-import { auth } from "@/server/utils/macros";
+import { auth } from "@/server/utils/plugins";
 import { Salt } from "@/server/utils/salts";
 import { charSeparated, decodeChk, encodeRewardsData } from "@/server/utils/text";
 

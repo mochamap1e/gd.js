@@ -4,6 +4,7 @@ import { eq } from "drizzle-orm";
 
 import { db } from "@/server/db/client";
 import { panelUser } from "@/server/db/schema";
+import { panelAuth } from "@/server/utils/plugins";
 
 const body = t.Object({
     username: t.String(),
@@ -15,6 +16,7 @@ const body = t.Object({
 });
 
 export const auth = new Elysia({ prefix: "/auth" })
+    .use(panelAuth)
     .post("/doesAdminExist", async ({ status }) => {
         try {
             const query = await db
@@ -44,8 +46,10 @@ export const auth = new Elysia({ prefix: "/auth" })
         }
     }, { body })
     
-    .post("/login", async ({ body, status }) => {
+    .post("/login", async ({ body, jwt, status, cookie: { auth } }) => {
         try {
+            if (!auth) return status(401);
+
             const query = await db
                 .select()
                 .from(panelUser)
@@ -56,12 +60,20 @@ export const auth = new Elysia({ prefix: "/auth" })
             const correctPassword = await argon2.verify(user.password, body.password);
 
             if (correctPassword) {
+                const value = await jwt.sign({ username: user.username });
+
+                auth.set({
+                    value,
+                    httpOnly: false,
+                    maxAge: 7 * 86400
+                });
+
                 return status(200);
             }
 
             return status(401);
         } catch(error) {
-            console.log("Failed to log in:", error);
+            console.error("Failed to log in:", error);
             return status(500);
         }
     }, { body });

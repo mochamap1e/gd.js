@@ -1,7 +1,7 @@
 import { Elysia } from "elysia";
 
 import { GDError } from "@/server/utils/errors";
-import { auth } from "@/server/utils/macros";
+import { auth } from "@/server/utils/plugins";
 import { getServerAddress } from "@/server/index";
 
 export const getAccountURL = new Elysia()

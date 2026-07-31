@@ -4,7 +4,7 @@ import { getDailyLevelTimeRemaining } from "@/server/cron/dailyLevel";
 import { db } from "@/server/db/client";
 import { daily } from "@/server/db/schema";
 import { GDError } from "@/server/utils/errors";
-import { auth } from "@/server/utils/macros";
+import { auth } from "@/server/utils/plugins";
 
 export const getGJDailyLevel = new Elysia()
     .use(auth)

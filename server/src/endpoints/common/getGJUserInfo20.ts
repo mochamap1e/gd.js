@@ -3,7 +3,7 @@ import { eq } from "drizzle-orm";
 
 import { db } from "@/server/db/client";
 import { user } from "@/server/db/schema";
-import { auth } from "@/server/utils/macros";
+import { auth } from "@/server/utils/plugins";
 import { GDError } from "@/server/utils/errors";
 import { createUserObject } from "@/server/utils/objects/user";
 

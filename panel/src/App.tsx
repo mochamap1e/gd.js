@@ -1,17 +1,40 @@
+import { useState, useEffect } from "react";
 import { Routes, Route } from "react-router-dom";
 
-import { Home } from "./pages/Home";
-import { Auth } from "./pages/Auth";
-import { Dashboard } from "./pages/dashboard/Dashboard";
+import { client } from "@/panel/clients/eden";
+import { Auth } from "@/panel/pages/Auth";
+import { Dashboard } from "@/panel/pages/Dashboard";
 
 export function App() {
-    return (
-        <Routes>
-            <Route path="/" element={<Home/>}/>
-            <Route path="/login" element={<Auth isRegister={false} isOnboarding={false}/>}/>
-            <Route path="/onboarding" element={<Auth isRegister={true} isOnboarding={true}/>}/>
+    const [exists, setExists] = useState<boolean | null>(null);
 
-            <Route path="/dashboard" element={<Dashboard/>}/>
-        </Routes>
-    );
+    useEffect(() => {
+        async function check() {
+            try {
+                const { data: exists } = await client.api.auth.doesAdminExist.post();
+                setExists(exists ?? null);
+            } catch(error) {
+                console.error(error);
+                setExists(null);
+            }
+        }
+
+        check();
+    }, []);
+
+    if (exists === null) { return <h1>Loading...</h1> }
+    if (exists) {
+        return (
+            <Routes>
+                <Route path="/" element={<Dashboard/>}/>
+                <Route path="/login" element={<Auth isRegister={false} isOnboarding={false}/>}/>
+            </Routes>
+        );
+    } else {
+        return (
+            <Routes>
+                <Route path="/" element={<Auth isRegister={true} isOnboarding={true}/>}/>
+            </Routes>
+        );
+    }
 }

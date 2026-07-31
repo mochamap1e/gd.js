@@ -3,7 +3,7 @@ import { Elysia, t } from "elysia";
 
 import { db } from "@/server/db/client";
 import { user } from "@/server/db/schema";
-import { auth } from "@/server/utils/macros";
+import { auth } from "@/server/utils/plugins";
 import { username } from "@/server/utils/types";
 import { TypeError, GDError, GDAccountError } from "@/server/utils/errors";
 

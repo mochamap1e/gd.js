@@ -1,12 +1,8 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 
 import { client } from "@/panel/clients/eden";
-import { adminExists } from "@/panel/utils/adminExists";
 
 export function Auth({ isRegister, isOnboarding }: { isRegister: boolean, isOnboarding: boolean }) {
-    const navigate = useNavigate();
-
     const [username, setUsername] = useState(isOnboarding ? "admin" : "");
     const [password, setPassword] = useState("");
 
@@ -21,20 +17,14 @@ export function Auth({ isRegister, isOnboarding }: { isRegister: boolean, isOnbo
                 await client.api.auth.register.post(body) :
                 await client.api.auth.login.post(body);
 
-            if (!response.error) navigate("/dashboard");
+            if (!response.error) {
+                if (isOnboarding) return window.location.reload();
+
+            }
         } catch(error) {
             console.error(error);
         }
     }
-
-    async function check() {
-        const exists = await adminExists();
-
-        if (exists && isOnboarding)
-            navigate("/login");
-    }
-
-    check();
 
     return (
         <div>

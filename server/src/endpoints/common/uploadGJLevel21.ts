@@ -5,7 +5,7 @@ import { eq } from "drizzle-orm";
 import { db } from "@/server/db/client";
 import { level } from "@/server/db/schema";
 import { GDError } from "@/server/utils/errors";
-import { auth } from "@/server/utils/macros";
+import { auth } from "@/server/utils/plugins";
 
 export const uploadGJLevel21 = new Elysia()
     .use(auth)
