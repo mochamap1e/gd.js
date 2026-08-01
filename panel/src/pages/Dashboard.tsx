@@ -2,6 +2,8 @@ import { useEffect } from "react";
 import { useCookies } from "react-cookie";
 import { useNavigate } from "react-router-dom";
 
+import { client } from "@/panel/clients/eden";
+
 export function Dashboard() {
     const navigate = useNavigate();
     const [cookie] = useCookies(["auth"]);
@@ -11,6 +13,9 @@ export function Dashboard() {
     return (
         <div>
             <h1>Dashboard</h1>
+            <button onClick={() => {
+                client.api.music.create.post()
+            }}>Test</button>
         </div>
     );
 }

@@ -3,7 +3,7 @@ import { Elysia, t } from "elysia";
 import { Key } from "@/server/utils/keys";
 import { auth } from "@/server/utils/plugins";
 import { Salt } from "@/server/utils/salts";
-import { charSeparated, decodeChk, encodeRewardsData } from "@/server/utils/text";
+import { join, decodeChk, encodeRewardsData } from "@/server/utils/text";
 
 export const getGJChallenges = new Elysia()
     .use(auth)
@@ -20,16 +20,16 @@ export const getGJChallenges = new Elysia()
             name: "meow"
         }
 
-        const challengesData = charSeparated(
+        const challengesData = join(
             ":",
             account.user_id,
             chk,
             udid,
             account.account_id,
             0,
-            charSeparated(",", attributes),
-            charSeparated(",", attributes),
-            charSeparated(",", attributes)
+            join(",", attributes),
+            join(",", attributes),
+            join(",", attributes)
         );
 
         return encodeRewardsData(challengesData, Key.DailyChallenge, Salt.Challenge);

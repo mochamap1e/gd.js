@@ -31,7 +31,7 @@ export function randomString(chars: number) {
     return string;
 }
 
-export function charSeparated(char: string, ...args: any) {
+export function join(char: string, ...args: any) {
     const dictionary = args[0];
     if ((dictionary !== null) && (typeof dictionary === "object")) {
         return Object.values(dictionary).join(char);

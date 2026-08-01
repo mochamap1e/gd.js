@@ -2,14 +2,14 @@ import { Elysia } from "elysia";
 
 import { GDError } from "@/server/utils/errors";
 import { auth } from "@/server/utils/plugins";
-import { charSeparated } from "@/server/utils/text";
+import { join } from "@/server/utils/text";
 
 export const syncGJAccountNew = new Elysia()
     .use(auth)
     .post("/syncGJAccountNew.php", async ({ account }) => {
         try {
             if (account.save_data) {
-                return charSeparated(
+                return join(
                     ";",
                     account.save_data,
                     account.save_data_game_version,

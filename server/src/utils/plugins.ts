@@ -3,7 +3,7 @@ import { jwt } from "@elysia/jwt";
 import { eq } from "drizzle-orm";
 
 import { db } from "@/server/db/client";
-import { user } from "@/server/db/schema";
+import { user, panelUser } from "@/server/db/schema";
 import { GDError } from "./errors";
 import { username } from "./types";
 
@@ -68,7 +68,14 @@ export const panelAuth = new Elysia()
                 if (!user)
                     return status(401);
 
-                return status(200);
+                const query = await db
+                    .select()
+                    .from(panelUser)
+                    .where(eq(panelUser.username, user.username as string));
+
+                const userData = query[0]; if (!userData) return status(404);
+
+                return { user: userData };
             }
         }
     });
