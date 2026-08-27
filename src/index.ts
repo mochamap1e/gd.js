@@ -1,13 +1,11 @@
 import fs from "fs";
 import { Elysia } from "elysia";
 import { cors } from "@elysia/cors";
-import { staticPlugin } from "@elysiajs/static";
 
 import { dailyLevelJob } from "./cron/dailyLevel";
 
 import { common } from "./endpoints/common";
 import { accounts } from "./endpoints/accounts";
-import { panel } from "./endpoints/panel";
 
 import { GDError } from "./utils/errors";
 
@@ -39,12 +37,6 @@ const GDPS = new Elysia({
         }
     })
 
-    // cdn
-    .use(staticPlugin({
-        assets: "./cdn",
-        prefix: "/cdn"
-    }))
-
     // cron jobs
     .use(dailyLevelJob)
     
@@ -56,16 +48,3 @@ const GDPS = new Elysia({
     .all("*", () => GDError.Generic)
 
     .listen(4500, ({ port }) => console.log("GDPS running on port", port));
-
-const panelServer = new Elysia()
-    // cors
-    .use(cors({
-        origin: "http://localhost:5173" // Change later ok? ok.
-    }))
-
-    // api
-    .use(panel)
-
-    .listen(4501, ({ port }) => console.log("Panel running on port", port));
-
-export type Panel = typeof panelServer;
