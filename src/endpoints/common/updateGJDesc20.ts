@@ -2,7 +2,7 @@ import { Elysia, t } from "elysia";
 import { eq } from "drizzle-orm";
 
 import { db } from "@/server/db/client";
-import { level } from "@/server/db/schema";
+import { level } from "@/server/db/schema/level";
 import { GDError } from "@/server/utils/errors";
 import { auth } from "@/server/utils/plugins";
 

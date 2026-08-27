@@ -5,9 +5,9 @@ import { Elysia } from "elysia";
 import { cron, Patterns } from "@elysia/cron";
 
 import { db } from "@/server/db/client";
-import { daily, dailyHistory } from "@/server/db/schema";
+import { daily, dailyHistory } from "@/server/db/schema/daily";
 
-const timezone = "America/New_York"; // which time zone it has to be midnight in for the daily level to reset
+const timezone = "America/New_York"; // which time zone it has to be midnight in for the daily level to change
 const pattern = Patterns.EVERY_DAY_AT_MIDNIGHT;
 
 dayjs.extend(utcPlugin);

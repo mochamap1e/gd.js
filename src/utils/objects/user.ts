@@ -1,4 +1,4 @@
-import { user } from "../../db/schema";
+import { user } from "@/server/db/schema/user";
 
 export function createUserObject(userData: typeof user.$inferInsert) {
     const map: ObjectMap[]  = [

@@ -1,6 +1,5 @@
 import fs from "fs";
 import { Elysia } from "elysia";
-import { cors } from "@elysia/cors";
 
 import { dailyLevelJob } from "./cron/dailyLevel";
 

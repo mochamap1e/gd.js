@@ -1,9 +1,8 @@
 import { Elysia, t } from "elysia";
-import { jwt } from "@elysia/jwt";
 import { eq } from "drizzle-orm";
 
 import { db } from "@/server/db/client";
-import { user, panelUser } from "@/server/db/schema";
+import { user } from "@/server/db/schema/user";
 import { GDError } from "./errors";
 import { username } from "./types";
 
@@ -53,29 +52,5 @@ export const auth = new Elysia()
                 userName: t.Optional(username),
                 accountID: t.Optional(t.String())
             })
-        }
-    });
-
-export const panelAuth = new Elysia()
-    .use(jwt({ name: "jwt", secret: process.env.JWT_SECRET! }))
-    .macro({
-        requiresAuthentication: {
-            async resolve({ jwt, status, cookie: { auth } }) {
-                if (!auth) return status(401);
-                
-                const user = await jwt.verify(auth.value as any);
-
-                if (!user)
-                    return status(401);
-
-                const query = await db
-                    .select()
-                    .from(panelUser)
-                    .where(eq(panelUser.username, user.username as string));
-
-                const userData = query[0]; if (!userData) return status(404);
-
-                return { user: userData };
-            }
         }
     });
