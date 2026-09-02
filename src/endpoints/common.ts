@@ -1,5 +1,6 @@
 import { Elysia } from "elysia";
 
+import { deleteGJLevelUser20 } from "./common/deleteGJLevelUser20";
 import { getAccountURL } from "./common/getAccountURL";
 import { getCustomContentURL } from "./common/getCustomContentURL";
 import { getGJChallenges } from "./common/getGJChallenges";
@@ -14,6 +15,7 @@ import { updateGJUserScore22 } from "./common/updateGJUserScore22";
 import { uploadGJLevel21 } from "./common/uploadGJLevel21";
 
 export const common = new Elysia()
+    .use(deleteGJLevelUser20)
     .use(getAccountURL)
     .use(getCustomContentURL)
     .use(getGJChallenges)
