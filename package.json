@@ -1,0 +1,12 @@
+{
+    "name": "gdps",
+    "private": true,
+    "type": "module",
+    "workspaces": ["server", "panel"],
+    "scripts": {
+        "dev": "concurrently -n 'Server,Panel' 'cd server && bun dev' 'cd panel && bun dev'"
+    },
+    "devDependencies": {
+        "concurrently": "^10.0.5"
+    }
+}
