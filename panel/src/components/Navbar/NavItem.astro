@@ -1,0 +1,20 @@
+---
+import type { AstroComponent } from "@tabler/icons-astro";
+
+interface Props {
+    path: string,
+    text: string,
+    Icon: AstroComponent
+}
+
+const { path, text, Icon } = Astro.props;
+---
+
+<li class="nav-item">
+    <a class="nav-link" href={path}>
+        <span class="nav-link-icon">
+            <Icon/>
+        </span>
+        <span class="nav-link-title">{text}</span>
+    </a>
+</li>

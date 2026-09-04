@@ -1,0 +1,29 @@
+---
+import "@tabler/core/dist/css/tabler.min.css";
+
+import Navbar from "@panel/components/Navbar/Navbar.astro";
+
+interface Props {
+    title?: string
+}
+
+const { title } = Astro.props;
+---
+
+<html lang="en">
+	<head>
+		<meta charset="utf-8"/>
+		<meta name="viewport" content="width=device-width"/>
+		<meta name="generator" content={Astro.generator}/>
+
+		<title>GDPS{title && ` - ${title}`}</title>
+	</head>
+	<body>
+		<div class="page">
+            <Navbar/>
+            <slot/>
+        </div>
+
+        <script>import "@tabler/core/dist/js/tabler.min.js";</script>
+	</body>
+</html>

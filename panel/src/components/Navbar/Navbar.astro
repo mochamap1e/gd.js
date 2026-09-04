@@ -1,0 +1,19 @@
+---
+import { IconHome } from "@tabler/icons-astro";
+
+import NavItem from "@panel/components/Navbar/NavItem.astro";
+---
+
+<aside class="navbar navbar-vertical navbar-expand-lg navbar-transparent">
+    <div class="container-fluid">
+        <div class="collapse navbar-collapse" id="sidebar-menu">
+            <ul class="navbar-nav pt-lg-3">
+                <NavItem
+                    path="/"
+                    text="Home"
+                    Icon={IconHome}
+                />
+            </ul>
+        </div>
+    </div>
+</aside>
