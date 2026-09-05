@@ -6,7 +6,7 @@ export function createUserObject(userData: typeof user.$inferInsert) {
         { key: 2, value: userData.user_id },
         { key: 3, value: userData.stars },
         { key: 4, value: userData.demon_count },
-        { key: 6, value: userData.ranking },
+        { key: 6, value: 999999 },
         { key: 8, value: userData.creator_points },
         { key: 9, value: userData.icon_id },
         { key: 10, value: userData.color },
@@ -26,7 +26,7 @@ export function createUserObject(userData: typeof user.$inferInsert) {
         { key: 26, value: userData.acc_robot },
         { key: 28, value: userData.acc_glow },
         { key: 29, value: userData.is_registered },
-        { key: 30, value: userData.global_rank },
+        { key: 30, value: 999999 },
         /*
         { key: 31, value: 0 },
         { key: 38, value: 0 },

@@ -20,8 +20,6 @@ export const user = pgTable("user", {
     creator_points: integer().notNull().default(0),
     secret_coins: integer().notNull().default(0),
     user_coins: integer().notNull().default(0),
-    ranking: integer().notNull().default(999999),
-    global_rank: integer().notNull().default(999999),
 
     // levels
     demons: varchar().notNull().default("0,0,0,0,0,0,0,0,0,0,0,0"),
