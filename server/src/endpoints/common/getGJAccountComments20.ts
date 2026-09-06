@@ -12,12 +12,13 @@ export const getGJAccountComments20 = new Elysia()
     .use(auth)
     .post("/getGJAccountComments20.php", async ({ body }) => {
         const { accountID, page } = body;
+        const targetAccountId = accountID[1] ?? accountID;
 
         try {
             const query = await db
                 .select()
                 .from(accountComment)
-                .where(eq(accountComment.account_id, parseInt(accountID[1]!)));
+                .where(eq(accountComment.account_id, parseInt(targetAccountId)));
 
             let response = "";
 
@@ -50,7 +51,12 @@ export const getGJAccountComments20 = new Elysia()
     }, {
         commonSecret: true,
         body: t.Object({
-            accountID: t.Tuple([t.String(), t.String()]), // ["your account id", "target's account id"]
+            // sometimes the client sends just the target id and sometimes it sends an array like ["client account id", "target's account id"]
+            // not sure why it does that but it's ok
+            accountID: t.Union([
+                t.String(),
+                t.Tuple([t.String(), t.String()])
+            ]),
             page: t.String()
         })
     });
