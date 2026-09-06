@@ -1,0 +1,23 @@
+// endpoint lists:
+
+done:
+- Accounts
+- Rewards // need to implement an actual rewards system but all endpoints work
+
+todo:
+- Comments
+- Levels
+- Lists
+- Misc
+- Socials
+- Songs
+- Users
+
+// misc:
+
+- add reusable object building function
+
+- make every route use the auth plugin cuz every route has a secret anyways
+
+- make it so i can just throw a 500 status instead of -1 every time, handle it in index.ts to return -1
+  - some errors are actually a status 500 (example on uploadGJAccComment20) so idk, maybe just return -1 for those instead of copying robtop 1:1

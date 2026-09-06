@@ -14,10 +14,10 @@
         "@elysia/jwt": "^1.4.2",
         "@elysiajs/static": "^1.4.10",
         "argon2": "^0.45.1",
-        "dayjs": "^1.11.23",
         "dotenv": "^17.4.2",
         "drizzle-orm": "^0.45.2",
         "mathjs": "^15.2.0",
+        "obscenity": "^0.4.6",
         "pg": "^8.23.0"
     },
     "devDependencies": {

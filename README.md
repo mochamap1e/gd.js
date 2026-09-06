@@ -2,9 +2,10 @@
 
 A Geometry Dash 2.2 private server made in TypeScript.
 
-The server uses the Elysia framework with PostgreSQL and Drizzle ORM for the database.
+The server uses the [Elysia](https://elysiajs.com/) framework with PostgreSQL and Drizzle ORM for the database.
+The panel uses the [Astro](https://astro.build/) framework with the [Tabler](https://tabler.io/) component library.
 
-This project entirely relies on https://boomlings.dev/ for documentation on the GD backend. All credit for reverse engineering goes to them.
+This project entirely relies on [boomlings.dev](https://boomlings.dev/) for documentation on the GD backend. All credit for reverse engineering goes to them.
 
 ### Generating certificates:
 ```

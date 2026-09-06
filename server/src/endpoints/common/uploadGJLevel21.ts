@@ -1,5 +1,4 @@
 import { Elysia, t } from "elysia";
-import { randomInt } from "mathjs";
 import { eq } from "drizzle-orm";
 
 import { db } from "@server/db/client";
@@ -39,17 +38,10 @@ export const uploadGJLevel21 = new Elysia()
         }
 
         try {
-            if (submittedId === 0) {
-                // upload as new level
-                const id = randomInt(1000, 9999);
-
-                data.level_id = id;
-
-                await db.insert(level).values(data);
-
-                return id;
-            } else {
-                // update existing level
+            if (submittedId === 0) { // upload as new level
+                const [response] = await db.insert(level).values(data).returning({ levelId: level.level_id });
+                return response!.levelId;
+            } else { // update existing level
                 const equality = eq(level.level_id, submittedId);
 
                 const query = await db

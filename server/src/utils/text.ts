@@ -1,4 +1,5 @@
 import crypto from "crypto";
+import { deflateSync } from "zlib";
 
 export function createHash(data: string, salt: string) {
     return crypto
@@ -51,4 +52,46 @@ export function encodeRewardsData(data: string, key: string, salt: string) {
     const hash = createHash(base64, salt); // hash
 
     return `${randomString(5)}${base64}|${hash}`;
+}
+
+export function encodeAccountLevelsData(data: string) {
+    const chars = 20;
+    return randomString(chars) +
+        Buffer.from(deflateSync(data)).toString("base64url") +
+        randomString(chars);
+}
+
+// not proud of this one but whatever, lowkey copied the numbers from cvolton's gdps
+export function relativeTimestamp(date: Date) {
+    function plural(number: number, unit: string) {
+        return `${number} ${unit}${number === 1 ? "" : "s"}`;
+    }
+
+    const delta = Math.floor((Date.now() - date.getTime()) / 1000);
+
+    if (delta < 60) {
+        return plural(delta, "second");
+    }
+
+    if (delta < 3600) {
+        return plural(Math.floor(delta / 60), "minute");
+    }
+
+    if (delta < 86400) {
+        return plural(Math.floor(delta / 3600), "hour");
+    }
+
+    if (delta < 604800) {
+        return plural(Math.floor(delta / 86400), "day");
+    }
+
+    if (delta < 2628000) {
+        return plural(Math.floor(delta / 604800), "week");
+    }
+
+    if (delta < 31536000) {
+        return plural(Math.floor(delta / 2628000), "month");
+    }
+
+    return plural(Math.floor(delta / 31536000), "year");
 }

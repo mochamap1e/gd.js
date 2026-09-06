@@ -2,7 +2,7 @@ import { Elysia } from "elysia";
 
 import { GDError } from "@server/utils/errors";
 import { auth } from "@server/utils/plugins";
-import { join } from "@server/utils/text";
+import { join, encodeAccountLevelsData } from "@server/utils/text";
 
 export const syncGJAccountNew = new Elysia()
     .use(auth)
@@ -14,8 +14,7 @@ export const syncGJAccountNew = new Elysia()
                     account.save_data,
                     account.save_data_game_version,
                     account.save_data_binary_version
-                    // need to add the rest of the data when more of the account stuff is done
-                );
+                ) + ";;;"; // skip the levels and map packs thing for now cuz the docs confuse me
             } else {
                 return GDError.Generic;
             }

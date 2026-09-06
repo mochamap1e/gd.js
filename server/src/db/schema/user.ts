@@ -1,4 +1,6 @@
-import { pgTable, serial, integer, varchar, boolean } from "drizzle-orm/pg-core";
+import { pgTable, serial, integer, varchar, timestamp, boolean } from "drizzle-orm/pg-core";
+
+import { level } from "@server/db/schema/level";
 
 export const user = pgTable("user", {
     // ids
@@ -21,7 +23,7 @@ export const user = pgTable("user", {
     secret_coins: integer().notNull().default(0),
     user_coins: integer().notNull().default(0),
 
-    // levels
+    // level counts
     demons: varchar().notNull().default("0,0,0,0,0,0,0,0,0,0,0,0"),
     classic_levels: varchar().notNull().default("0,0,0,0,0,0,0,0"),
     platformer_levels: varchar().notNull().default("0,0,0,0,0,0"),
@@ -62,7 +64,10 @@ export const user = pgTable("user", {
     account_highlight: varchar().notNull().default(""),
 
     // save file
-    save_data: varchar().notNull().default(""),
+    save_data: varchar(),
     save_data_game_version: integer(),
-    save_data_binary_version: integer()
+    save_data_binary_version: integer(),
+
+    // date
+    created_at: timestamp().notNull().defaultNow()
 });
