@@ -15,7 +15,7 @@ export const list = pgTable("list", {
     upload_date: varchar().notNull(),
     update_date: varchar().notNull(),
     account_id: integer().notNull().references(() => user.account_id),
-    level_ids: integer().notNull().references(() => level.level_id).array(),
+    // level_ids: ADD JUNCTION TABLE THING HERE
     list_reward: integer().notNull(),
     list_reward_requirement: integer().notNull()
 });

@@ -14,8 +14,9 @@
         "@elysia/jwt": "^1.4.2",
         "@elysiajs/static": "^1.4.10",
         "argon2": "^0.45.1",
+        "dayjs": "^1.11.23",
         "dotenv": "^17.4.2",
-        "drizzle-orm": "^0.45.2",
+        "drizzle-orm": "^1.0.0-rc.4",
         "mathjs": "^15.2.0",
         "obscenity": "^0.4.6",
         "pg": "^8.23.0"
@@ -23,7 +24,7 @@
     "devDependencies": {
         "@types/bun": "^1.4.0",
         "@types/pg": "^8.23.1",
-        "drizzle-kit": "^0.31.10",
+        "drizzle-kit": "^1.0.0-rc.4",
         "elysia": "^1.4.30",
         "typescript": "^7.0.2"
     }

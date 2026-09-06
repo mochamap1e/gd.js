@@ -16,10 +16,11 @@ export const getGJDailyLevel = new Elysia()
         if ((type === "2") && (!chk)) return GDError.Generic;
 
         try {
-            const query = await db.select().from(daily).limit(1);
-            const currentLevel = query[0]; if (!currentLevel) return GDError.Generic;
+            const [response] = await db.select().from(daily).limit(1);
+            
+            if (!response) return GDError.Generic;
 
-            const currentLevelIndex = currentLevel.index;
+            const currentLevelIndex = response.index;
             const timeRemaining = getDailyLevelTimeRemaining();
 
             return `${currentLevelIndex}|${timeRemaining}`;

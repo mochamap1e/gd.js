@@ -48,7 +48,7 @@ export const user = pgTable("user", {
     acc_explosion: integer().notNull().default(1),
     special: integer().notNull().default(0),
 
-    // social
+    // user settings
     message_state: integer().notNull().default(0),
     friends_state: integer().notNull().default(0),
     comment_history_state: integer().notNull().default(0),
@@ -58,6 +58,9 @@ export const user = pgTable("user", {
     discord: varchar().notNull().default(""),
     instagram: varchar().notNull().default(""),
     tiktok: varchar().notNull().default(""),
+
+    // social
+
 
     // other
     mod: integer().notNull().default(0),

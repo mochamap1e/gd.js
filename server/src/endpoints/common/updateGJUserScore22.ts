@@ -6,6 +6,8 @@ import { user } from "@server/db/schema/user";
 import { auth } from "@server/utils/plugins";
 import { GDError } from "@server/utils/errors";
 
+// todo: make this actually do something
+
 export const updateGJUserScore22 = new Elysia()
     .use(auth)
     .post("/updateGJUserScore22.php", async ({ body }) => {

@@ -8,6 +8,8 @@ import { GDError } from "@server/utils/errors";
 import { auth } from "@server/utils/plugins";
 import { join } from "@server/utils/text";
 
+// todo: add pages
+
 export const getGJAccountComments20 = new Elysia()
     .use(auth)
     .post("/getGJAccountComments20.php", async ({ body }) => {
