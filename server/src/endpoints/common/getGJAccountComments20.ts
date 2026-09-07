@@ -3,10 +3,9 @@ import { eq } from "drizzle-orm";
 
 import { db } from "@server/db/client";
 import { accountComments } from "@server/db/schema";
-import { createAccountCommentObject } from "@server/utils/objects/comment";
 import { GDError } from "@server/utils/errors";
 import { auth } from "@server/utils/plugins";
-import { join } from "@server/utils/text";
+import { relativeTimestamp } from "@server/utils/text";
 
 // todo: add pages
 
@@ -22,30 +21,31 @@ export const getGJAccountComments20 = new Elysia()
                 .from(accountComments)
                 .where(eq(accountComments.account_id, parseInt(targetAccountId)));
 
-            let response = "";
-
-            // convert all comments to comment objects
-
             const commentObjects: any[] = [];
-            query.forEach(comment => commentObjects.push(createAccountCommentObject(comment)));
 
-            // append comment objects
+            query.forEach(comment => {
+                commentObjects.push([
+                    2, comment.comment,
+                    4, comment.likes,
+                    5, comment.dislikes,
+                    6, comment.comment_id,
+                    8, comment.account_id,
+                    9, relativeTimestamp(comment.posted_at)
+                ].join("~"))
+            });
 
-            commentObjects.forEach(object => response += (object + "|"));
-            response = response.slice(0, -1); // remove last |
-
-            // add page info
-
-            response += "#";
-            response += join(":",
+            const pageInfo = [
                 query.length,
                 page,
                 10
-            );
+            ].join(":");
 
             // return
 
-            return response;
+            return [
+                commentObjects.join("|"),
+                pageInfo
+            ].join("#");
         } catch(error) {
             console.error("Failed to fetch account comments:", error);
             return GDError.Generic;

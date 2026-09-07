@@ -32,15 +32,6 @@ export function randomString(chars: number) {
     return string;
 }
 
-export function join(char: string, ...args: any) {
-    const dictionary = args[0];
-    if ((dictionary !== null) && (typeof dictionary === "object")) {
-        return Object.values(dictionary).join(char);
-    } else {
-        return args.join(char);
-    }
-}
-
 export function decodeChk(chk: string, xorKey: string) {
     return xor(atob(chk.slice(5)), xorKey); // remove random 5 chars, decode base64, decode xor
 }

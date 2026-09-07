@@ -5,7 +5,7 @@ import { GDError } from "@server/utils/errors";
 import { Key } from "@server/utils/keys";
 import { auth } from "@server/utils/plugins";
 import { Salt } from "@server/utils/salts";
-import { join, decodeChk, encodeRewardsData } from "@server/utils/text";
+import { decodeChk, encodeRewardsData } from "@server/utils/text";
 
 function k(x: number) { return x + 1000; }
 
@@ -44,9 +44,10 @@ const Item = {
 const rewards: WraithReward[] = [
     {
         key: "meow",
-        reward: join(",",
-            Item.GoldKey, 1
-        ),
+        reward: [
+            Item.Diamonds,
+            10
+        ],
         rewardId: 1,
         chestType: 2
     }
@@ -62,13 +63,12 @@ export const getGJSecretReward = new Elysia()
         
         rewards.forEach(reward => {
             if (reward.key === body.rewardKey.toLowerCase().replaceAll(" ", "")) {
-                rewardsData = join(
-                    ":",
+                rewardsData = [
                     chk,
                     randomInt(1000, 9999), // the reward id is used to see which codes you've already claimed, for dev purposes this is randomized
                     reward.chestType,
-                    reward.reward
-                );
+                    reward.reward.join(",")
+                ].join(":");
             }
         });
 

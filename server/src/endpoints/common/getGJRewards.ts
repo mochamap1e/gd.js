@@ -4,7 +4,7 @@ import { randomInt } from "mathjs";
 import { Key } from "@server/utils/keys";
 import { auth } from "@server/utils/plugins";
 import { Salt } from "@server/utils/salts";
-import { join, decodeChk, encodeRewardsData } from "@server/utils/text";
+import { decodeChk, encodeRewardsData } from "@server/utils/text";
 
 const items = [1, 2, 3, 4, 5, 6, 10, 11, 12, 13, 14]; // 6 is key
 
@@ -57,20 +57,19 @@ export const getGJRewards = new Elysia()
             item2: getRandomItem()
         };
 
-        const rewardsData = join(
-            ":",
+        const rewardsData = [
             account.user_id,
             chk,
             udid,
             account.account_id,
             0,
-            join(",", smallChestRewards),
+            Object.values(smallChestRewards).join(","),
             670,
             0,
-            join(",", largeChestRewards),
+            Object.values(largeChestRewards).join(","),
             671,
             rewardType
-        );
+        ].join(":");
 
         return encodeRewardsData(rewardsData, Key.ChestReward, Salt.Reward);
     }, {

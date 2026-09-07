@@ -37,7 +37,7 @@ interface QuestAttributes {
 
 interface WraithReward {
     key: string,
-    reward: string,
+    reward: any[],
     rewardId: number,
     chestType: 1 | 2
 }

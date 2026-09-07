@@ -4,7 +4,7 @@ import { db } from "@server/db/client";
 import { GDError } from "@server/utils/errors";
 import { auth } from "@server/utils/plugins";
 import { Salt } from "@server/utils/salts";
-import { createHash, join } from "@server/utils/text";
+import { createHash } from "@server/utils/text";
 
 export const getGJMapPacks21 = new Elysia()
     .use(auth)
@@ -14,30 +14,26 @@ export const getGJMapPacks21 = new Elysia()
 
             //////// build packs
 
-            let packs = "";
+            let packs: string[] = [];
 
             function object(pack: typeof response[number]) {
-                let levelsString = "";
+                let levels: number[] = [];
 
-                //- todo: make whatever this is called a reusable function
-                pack.levels.forEach((level) => levelsString += `${level.level_id},`);
-                levelsString = levelsString.slice(0, -1);
+                pack.levels.forEach((level) => levels.push(level.level_id));
 
-                return join(":",
+                return [
                     1, pack.id,
                     2, pack.name,
-                    3, levelsString,
+                    3, levels.join(","),
                     4, pack.stars,
                     5, pack.coins,
                     6, pack.difficulty,
                     7, pack.text_color,
                     8, pack.bar_color
-                );
+                ].join(":");
             }
-
-            //- HERE IT IS AGAIN
-            response.forEach((pack) => packs += `${object(pack)}|`);
-            packs = packs.slice(0, -1);
+            
+            response.forEach((pack) => packs.push(object(pack)));
 
             //////// build page
 
@@ -61,7 +57,11 @@ export const getGJMapPacks21 = new Elysia()
 
             //////// return
 
-            return join("#", packs, page, hash);
+            return [
+                packs.join("|"),
+                page,
+                hash
+            ].join("#");
         } catch(error) {
             console.error("Failed to fetch map packs:", error);
             return GDError.Generic;

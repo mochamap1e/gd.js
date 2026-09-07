@@ -1,10 +1,12 @@
 import fs from "fs";
 import { Elysia } from "elysia";
+import { rateLimit } from "elysia-rate-limit";
 
 import { dailyLevelJob } from "@server/cron/dailyLevel";
 
 import { common } from "@server/endpoints/common";
 import { accounts } from "@server/endpoints/accounts";
+import { switcher } from "@server/endpoints/switcher";
 
 import { GDError } from "@server/utils/errors";
 
@@ -38,10 +40,17 @@ const GDPS = new Elysia({
 
     // cron jobs
     .use(dailyLevelJob)
+
+    // rate limit
+    .use(rateLimit({
+        max: 2,
+        duration: 1000
+    }))
     
     // endpoints
     .use(common)
     .use(accounts)
+    .use(switcher)
 
     // error for undefined routes
     .all("*", () => GDError.Generic)

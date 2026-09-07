@@ -20,17 +20,16 @@ export const getGJChallenges = new Elysia()
             name: "meow"
         }
 
-        const challengesData = join(
-            ":",
+        const challengesData = [
             account.user_id,
             chk,
             udid,
             account.account_id,
             0,
-            join(",", attributes),
-            join(",", attributes),
-            join(",", attributes)
-        );
+            Object.values(attributes).join(","),
+            Object.values(attributes).join(","),
+            Object.values(attributes).join(",")
+        ].join(":");
 
         return encodeRewardsData(challengesData, Key.DailyChallenge, Salt.Challenge);
     }, {
