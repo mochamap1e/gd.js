@@ -2,7 +2,7 @@ import { Elysia, t } from "elysia";
 import { eq } from "drizzle-orm";
 
 import { db } from "@server/db/client";
-import { accountComment } from "@server/db/schema/comment";
+import { accountComments } from "@server/db/schema";
 import { createAccountCommentObject } from "@server/utils/objects/comment";
 import { GDError } from "@server/utils/errors";
 import { auth } from "@server/utils/plugins";
@@ -19,8 +19,8 @@ export const getGJAccountComments20 = new Elysia()
         try {
             const query = await db
                 .select()
-                .from(accountComment)
-                .where(eq(accountComment.account_id, parseInt(targetAccountId)));
+                .from(accountComments)
+                .where(eq(accountComments.account_id, parseInt(targetAccountId)));
 
             let response = "";
 

@@ -2,7 +2,7 @@ import { Elysia, t } from "elysia";
 import { eq } from "drizzle-orm";
 
 import { db } from "@server/db/client";
-import { user } from "@server/db/schema/user";
+import { users } from "@server/db/schema";
 import { auth } from "@server/utils/plugins";
 import { GDError } from "@server/utils/errors";
 
@@ -16,8 +16,8 @@ export const updateGJUserScore22 = new Elysia()
         try {
             const query = await db
                 .select()
-                .from(user)
-                .where(eq(user.username, userName));
+                .from(users)
+                .where(eq(users.username, userName));
 
             const userData = query[0]; if (!userData) return GDError.Generic;
 

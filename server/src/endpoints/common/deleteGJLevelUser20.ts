@@ -2,7 +2,7 @@ import { Elysia, t } from "elysia";
 import { eq } from "drizzle-orm";
 
 import { db } from "@server/db/client";
-import { level } from "@server/db/schema/level";
+import { levels } from "@server/db/schema";
 import { GDError } from "@server/utils/errors";
 import { auth } from "@server/utils/plugins";
 
@@ -11,12 +11,12 @@ export const deleteGJLevelUser20 = new Elysia()
     .post("/deleteGJLevelUser20.php", async ({ body, account }) => {
         const { levelID } = body;
 
-        const equality = eq(level.level_id, parseInt(levelID));
+        const equality = eq(levels.level_id, parseInt(levelID));
 
         try {
             const query = await db
                 .select()
-                .from(level)
+                .from(levels)
                 .where(equality);
 
             const targetLevel = query[0];
@@ -25,7 +25,7 @@ export const deleteGJLevelUser20 = new Elysia()
             if (targetLevel.player_id !== account.account_id) return GDError.Generic; // user does not own level
 
             await db
-                .delete(level)
+                .delete(levels)
                 .where(equality);
 
             return 1;

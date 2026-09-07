@@ -1,5 +1,5 @@
 export const Salt = {
-    LevelUploadSeed: "xI25fpAapCQg",
+    Level: "xI25fpAapCQg",
     CommentChk: "xPT6iUrtws0J",
     LikeAndRateChk: "ysg6pUrtjn0J",
     UpdateProfileChk: "xI35fsAapCRg",

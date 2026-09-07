@@ -1,6 +1,6 @@
-import { user } from "@server/db/schema/user";
+import { users } from "@server/db/schema";
 
-export function createUserObject(userData: typeof user.$inferInsert) {
+export function createUserObject(userData: typeof users.$inferInsert) {
     const map: ObjectMap[]  = [
         { key: 1, value: userData.username },
         { key: 2, value: userData.user_id },
@@ -32,23 +32,23 @@ export function createUserObject(userData: typeof user.$inferInsert) {
         { key: 38, value: 0 },
         { key: 39, value: 0 },
         */
-       { key: 43, value: userData.acc_spider },
-       { key: 44, value: userData.twitter },
-       { key: 45, value: userData.twitch },
-       { key: 46, value: userData.diamonds },
-       { key: 48, value: userData.acc_explosion },
-       { key: 49, value: userData.mod },
-       { key: 50, value: userData.comment_history_state },
-       { key: 51, value: userData.color3 },
-       { key: 52, value: userData.moons },
-       { key: 53, value: userData.acc_swing },
-       { key: 54, value: userData.acc_jetpack },
-       { key: 55, value: userData.demons },
-       { key: 56, value: userData.classic_levels },
-       { key: 57, value: userData.platformer_levels },
-       { key: 58, value: userData.discord },
-       { key: 59, value: userData.instagram },
-       { key: 60, value: userData.tiktok },
+        { key: 43, value: userData.acc_spider },
+        { key: 44, value: userData.twitter },
+        { key: 45, value: userData.twitch },
+        { key: 46, value: userData.diamonds },
+        { key: 48, value: userData.acc_explosion },
+        { key: 49, value: userData.mod },
+        { key: 50, value: userData.comment_history_state },
+        { key: 51, value: userData.color3 },
+        { key: 52, value: userData.moons },
+        { key: 53, value: userData.acc_swing },
+        { key: 54, value: userData.acc_jetpack },
+        { key: 55, value: userData.demons },
+        { key: 56, value: userData.classic_levels },
+        { key: 57, value: userData.platformer_levels },
+        { key: 58, value: userData.discord },
+        { key: 59, value: userData.instagram },
+        { key: 60, value: userData.tiktok },
     ];
 
     let response = "";

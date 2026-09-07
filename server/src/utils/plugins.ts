@@ -2,7 +2,7 @@ import { Elysia, t } from "elysia";
 import { eq } from "drizzle-orm";
 
 import { db } from "@server/db/client";
-import { user } from "@server/db/schema/user";
+import { users } from "@server/db/schema";
 import { GDError } from "@server/utils/errors";
 import { username } from "@server/utils/types";
 
@@ -31,12 +31,12 @@ export const auth = new Elysia()
 
                 // if both are provided it will resort to account id
                 if (!userName && !accountID) return;
-                if (userName) equality = eq(user.username, userName);
-                if (accountID) equality = eq(user.account_id, parseInt(accountID));
+                if (userName) equality = eq(users.username, userName);
+                if (accountID) equality = eq(users.account_id, parseInt(accountID));
 
                 const query = await db
                     .select()
-                    .from(user)
+                    .from(users)
                     .where(equality)
 
                 const userData = query[0]; if (!userData) return;

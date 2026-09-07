@@ -45,6 +45,10 @@ export function decodeChk(chk: string, xorKey: string) {
     return xor(atob(chk.slice(5)), xorKey); // remove random 5 chars, decode base64, decode xor
 }
 
+export function decodeB64(data: string) {
+    return Buffer.from(data, "base64url").toString("utf-8");
+}
+
 export function encodeRewardsData(data: string, key: string, salt: string) {
     data = `${randomString(5)}:${data}`;
     const xored = xor(data, key); // xor

@@ -1,7 +1,7 @@
-import { accountComment } from "@server/db/schema/comment";
+import { accountComments } from "@server/db/schema";
 import { relativeTimestamp } from "@server/utils/text";
 
-export function createAccountCommentObject(comment: typeof accountComment.$inferInsert) {
+export function createAccountCommentObject(comment: typeof accountComments.$inferInsert) {
     const map: ObjectMap[]  = [
         { key: 2, value: comment.comment },
         { key: 4, value: comment.likes },

@@ -5,7 +5,7 @@ import { Elysia } from "elysia";
 import { cron, Patterns } from "@elysia/cron";
 
 import { db } from "@server/db/client";
-import { daily, dailyHistory } from "@server/db/schema/daily";
+import { dailyLevel, dailyLevelHistory } from "@server/db/schema";
 
 const timezone = "America/New_York"; // which time zone it has to be midnight in for the daily level to change
 const pattern = Patterns.EVERY_DAY_AT_MIDNIGHT;
@@ -27,7 +27,7 @@ export const dailyLevelJob = new Elysia()
         timezone,
         async run() {
             try {
-                const query = await db.select().from(daily).limit(1);
+                const query = await db.select().from(dailyLevel).limit(1);
                 const currentLevel = query[0];
                 
                 if (!currentLevel)
@@ -43,14 +43,14 @@ export const dailyLevelJob = new Elysia()
                 await db.transaction(async (tx) => {
                     // add current daily to history
                     if (currentLevel.level_id != null) {
-                        await tx.insert(dailyHistory).values({
+                        await tx.insert(dailyLevelHistory).values({
                             index: currentLevel.index,
                             level_id: currentLevel.level_id
                         });
                     }
 
                     // update daily
-                    await tx.update(daily).set({
+                    await tx.update(dailyLevel).set({
                         level_id: newDailyId,
                         next_level_id: null
                     });

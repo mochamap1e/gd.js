@@ -2,7 +2,7 @@ import { Elysia, t } from "elysia";
 import { eq } from "drizzle-orm";
 
 import { db } from "@server/db/client";
-import { user } from "@server/db/schema/user";
+import { users } from "@server/db/schema";
 import { auth } from "@server/utils/plugins";
 import { GDError } from "@server/utils/errors";
 import { createUserObject } from "@server/utils/objects/user";
@@ -15,8 +15,8 @@ export const getGJUserInfo20 = new Elysia()
         try {
             const query = await db
                 .select()
-                .from(user)
-                .where(eq(user.account_id, parseInt(targetAccountID)));
+                .from(users)
+                .where(eq(users.account_id, parseInt(targetAccountID)));
 
             const targetUserData = query[0]; if (!targetUserData) return GDError.Generic;
 

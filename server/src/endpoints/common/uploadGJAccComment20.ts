@@ -1,26 +1,27 @@
 import { Elysia, t } from "elysia";
 
 import { db } from "@server/db/client";
-import { accountComment } from "@server/db/schema/comment";
+import { accountComments } from "@server/db/schema";
 import { GDError } from "@server/utils/errors";
 import { hasObscenity } from "@server/utils/obscenity";
 import { auth } from "@server/utils/plugins";
+import { decodeB64 } from "@server/utils/text";
 
 export const uploadGJAccComment20 = new Elysia()
     .use(auth)
     .post("/uploadGJAccComment20.php", async ({ body, account }) => {
         const comment = body.comment;
-        const rawComment = Buffer.from(comment, "base64url").toString("utf-8");
+        const rawComment = decodeB64(comment);
 
         if (!hasObscenity(rawComment)) {
             try {
                 const [response] = await db
-                    .insert(accountComment)
+                    .insert(accountComments)
                     .values({
                         account_id: account.account_id,
                         comment
                     })
-                    .returning({ commentId: accountComment.comment_id });
+                    .returning({ commentId: accountComments.comment_id });
 
                 return response!.commentId;
             } catch(error) {

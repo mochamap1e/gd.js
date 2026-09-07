@@ -2,7 +2,7 @@ import { Elysia, t } from "elysia";
 import { eq } from "drizzle-orm";
 
 import { db } from "@server/db/client";
-import { user } from "@server/db/schema/user";
+import { users } from "@server/db/schema";
 import { GDError } from "@server/utils/errors";
 import { auth } from "@server/utils/plugins";
 
@@ -11,7 +11,7 @@ export const updateGJAccSettings20 = new Elysia()
     .post("/updateGJAccSettings20.php", async ({ body, account }) => {
         try {
             await db
-                .update(user)
+                .update(users)
                 .set({
                     message_state: parseInt(body.mS),
                     friends_state: parseInt(body.frS),
@@ -24,7 +24,7 @@ export const updateGJAccSettings20 = new Elysia()
                     discord: body.discord,
                     custom: body.custom
                 })
-                .where(eq(user.account_id, account.account_id));
+                .where(eq(users.account_id, account.account_id));
 
             return 1;
         } catch(error) {

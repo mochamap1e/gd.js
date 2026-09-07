@@ -2,7 +2,7 @@ import { Elysia, t } from "elysia";
 import { eq } from "drizzle-orm";
 
 import { db } from "@server/db/client";
-import { accountComment } from "@server/db/schema/comment";
+import { accountComments } from "@server/db/schema";
 import { GDError } from "@server/utils/errors";
 import { auth } from "@server/utils/plugins";
 
@@ -11,12 +11,12 @@ export const deleteGJAccComment20 = new Elysia()
     .post("/deleteGJAccComment20.php", async ({ body, account }) => {
         const { commentID } = body;
 
-        const equality = eq(accountComment.comment_id, parseInt(commentID));
+        const equality = eq(accountComments.comment_id, parseInt(commentID));
 
         try {
             const query = await db
                 .select()
-                .from(accountComment)
+                .from(accountComments)
                 .where(equality);
 
             const targetComment = query[0];
@@ -25,7 +25,7 @@ export const deleteGJAccComment20 = new Elysia()
             if (targetComment.account_id !== account.account_id) return GDError.Generic;
 
             await db
-                .delete(accountComment)
+                .delete(accountComments)
                 .where(equality);
 
             return 1;

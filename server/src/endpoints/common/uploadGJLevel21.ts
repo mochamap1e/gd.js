@@ -2,7 +2,7 @@ import { Elysia, t } from "elysia";
 import { eq } from "drizzle-orm";
 
 import { db } from "@server/db/client";
-import { level } from "@server/db/schema/level";
+import { levels } from "@server/db/schema";
 import { GDError } from "@server/utils/errors";
 import { auth } from "@server/utils/plugins";
 
@@ -11,7 +11,7 @@ export const uploadGJLevel21 = new Elysia()
     .post("/uploadGJLevel21.php", async ({ body, account }) => {
         const submittedId = parseInt(body.levelID);
 
-        let data: typeof level.$inferInsert = {
+        let data: typeof levels.$inferInsert = {
             game_version: parseInt(body.gameVersion),
             player_id: parseInt(body.accountID!),
             level_id: undefined!,
@@ -39,14 +39,14 @@ export const uploadGJLevel21 = new Elysia()
 
         try {
             if (submittedId === 0) { // upload as new level
-                const [response] = await db.insert(level).values(data).returning({ levelId: level.level_id });
+                const [response] = await db.insert(levels).values(data).returning({ levelId: levels.level_id });
                 return response!.levelId;
             } else { // update existing level
-                const equality = eq(level.level_id, submittedId);
+                const equality = eq(levels.level_id, submittedId);
 
                 const query = await db
                     .select()
-                    .from(level)
+                    .from(levels)
                     .where(equality);
 
                 const levelData = query[0]; if(!levelData) return GDError.Generic;
@@ -56,7 +56,7 @@ export const uploadGJLevel21 = new Elysia()
                     data.version = levelData.version + 1;
 
                     await db
-                        .update(level)
+                        .update(levels)
                         .set(data)
                         .where(equality);
 

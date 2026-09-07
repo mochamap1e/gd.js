@@ -20,7 +20,12 @@ todo:
 
 - redo schemas
 
-- add reusable object building function
+- fix getGJUsers20 breaking if you search for strings that only partially match usernames
+  - for example, if a "lexi" account exists and u search "lex" it acts strange on both the server and client
+
+- add proper type checking to all endpoints
+
+- I'VE BEEN USING THE JOIN FUNCTION BUT THIS ENTIRE TIME you can just do [].join() ok so switch everything to that
 
 - make every route use the auth plugin cuz every route has a secret anyways
 

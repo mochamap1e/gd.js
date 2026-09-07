@@ -2,7 +2,7 @@ import crypto from "crypto";
 import { Elysia, t } from "elysia";
 
 import { db } from "@server/db/client";
-import { user } from "@server/db/schema/user";
+import { users } from "@server/db/schema";
 import { auth } from "@server/utils/plugins";
 import { username } from "@server/utils/types";
 import { TypeError, GDError, GDAccountError } from "@server/utils/errors";
@@ -19,7 +19,7 @@ export const registerGJAccount = new Elysia()
         try {
             password = generateGJP2(password);
 
-            await db.insert(user).values({
+            await db.insert(users).values({
                 username: userName,
                 password,
                 email

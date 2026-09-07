@@ -1,9 +1,5 @@
-import { Pool } from "pg";
 import { drizzle } from "drizzle-orm/node-postgres";
 
-const pool = new Pool({
-    connectionString: process.env.DATABASE_URL,
-    connectionTimeoutMillis: 3000
-});
+import * as schema from "@server/db/schema";
 
-export const db = drizzle({ client: pool });
+export const db = drizzle(process.env.DATABASE_URL!, schema);

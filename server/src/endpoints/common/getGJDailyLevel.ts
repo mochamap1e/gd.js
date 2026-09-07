@@ -3,7 +3,7 @@ import { Elysia, t } from "elysia";
 import { getDailyLevelTimeRemaining } from "@server/cron/dailyLevel";
 
 import { db } from "@server/db/client";
-import { daily } from "@server/db/schema/daily";
+import { dailyLevel } from "@server/db/schema";
 import { GDError } from "@server/utils/errors";
 import { auth } from "@server/utils/plugins";
 
@@ -16,7 +16,7 @@ export const getGJDailyLevel = new Elysia()
         if ((type === "2") && (!chk)) return GDError.Generic;
 
         try {
-            const [response] = await db.select().from(daily).limit(1);
+            const [response] = await db.select().from(dailyLevel).limit(1);
             
             if (!response) return GDError.Generic;
 
