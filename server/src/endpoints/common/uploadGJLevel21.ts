@@ -14,7 +14,7 @@ export const uploadGJLevel21 = new Elysia()
         let data: typeof levels.$inferInsert = {
             game_version: parseInt(body.gameVersion),
             player_id: parseInt(body.accountID!),
-            level_id: undefined!,
+            id: undefined!,
             level_name: body.levelName,
             description: body.levelDesc,
             version: parseInt(body.levelVersion),
@@ -39,10 +39,10 @@ export const uploadGJLevel21 = new Elysia()
 
         try {
             if (submittedId === 0) { // upload as new level
-                const [response] = await db.insert(levels).values(data).returning({ levelId: levels.level_id });
+                const [response] = await db.insert(levels).values(data).returning({ levelId: levels.id });
                 return response!.levelId;
             } else { // update existing level
-                const equality = eq(levels.level_id, submittedId);
+                const equality = eq(levels.id, submittedId);
 
                 const query = await db
                     .select()
@@ -52,7 +52,7 @@ export const uploadGJLevel21 = new Elysia()
                 const levelData = query[0]; if(!levelData) return GDError.Generic;
 
                 if (levelData.player_id === account.account_id) {
-                    data.level_id = submittedId;
+                    data.id = submittedId;
                     data.version = levelData.version + 1;
 
                     await db

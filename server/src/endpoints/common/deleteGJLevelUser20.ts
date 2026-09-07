@@ -11,7 +11,7 @@ export const deleteGJLevelUser20 = new Elysia()
     .post("/deleteGJLevelUser20.php", async ({ body, account }) => {
         const { levelID } = body;
 
-        const equality = eq(levels.level_id, parseInt(levelID));
+        const equality = eq(levels.id, parseInt(levelID));
 
         try {
             const query = await db

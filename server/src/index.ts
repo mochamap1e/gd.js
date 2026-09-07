@@ -26,12 +26,14 @@ const GDPS = new Elysia({
 
     // lifecycle
     .guard({
-        beforeHandle({ request, body, redirect }) {
+        beforeHandle({ request, body, status, redirect }) {
             console.log("Requested:", request.url);
             console.log("Body:", body);
-
-            if (request.url.includes("database")) // some requests such as backing up data go to /database
-                return redirect(request.url.replace("/database", ""), 308); // 308 preserves data unlike 301 smh!
+            
+            // require null/blank user agent
+            if (![null, ""].includes(request.headers.get("User-Agent"))) {
+                return status(403);
+            }
         },
         afterHandle({ responseValue }) {
             console.log("Response:", responseValue);
@@ -43,8 +45,8 @@ const GDPS = new Elysia({
 
     // rate limit
     .use(rateLimit({
-        max: 2,
-        duration: 1000
+        duration: 1000,
+        max: 2
     }))
     
     // endpoints
@@ -52,7 +54,7 @@ const GDPS = new Elysia({
     .use(accounts)
     .use(switcher)
 
-    // error for undefined routes
-    .all("*", () => GDError.Generic)
+    // 404 for undefined routes
+    .all("*", ({ status }) => { return status(404); })
 
     .listen(4500, ({ port }) => console.log("GDPS running on port", port));

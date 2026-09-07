@@ -19,7 +19,7 @@ export const getGJMapPacks21 = new Elysia()
             function object(pack: typeof response[number]) {
                 let levels: number[] = [];
 
-                pack.levels.forEach((level) => levels.push(level.level_id));
+                pack.levels.forEach((level) => levels.push(level.id));
 
                 return [
                     1, pack.id,

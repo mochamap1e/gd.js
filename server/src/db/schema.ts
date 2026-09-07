@@ -95,7 +95,7 @@ export const friendRequests = pgTable("friend_requests", {
 /* ------------------------------------------------ */
 
 export const levels = pgTable("levels", {
-    level_id: serial().notNull().primaryKey(),
+    id: serial().notNull().primaryKey(),
     level_name: varchar().notNull(),
     description: varchar().notNull().default(""),
     level_string: varchar().notNull(),
@@ -153,7 +153,6 @@ export const levelLists = pgTable("level_lists", {
     upload_date: varchar().notNull(),
     update_date: varchar().notNull(),
     account_id: integer().notNull().references(() => users.account_id),
-    // level_ids: ADD JUNCTION TABLE THING HERE
     list_reward: integer().notNull(),
     list_reward_requirement: integer().notNull()
 });
@@ -172,13 +171,13 @@ export const mapPacks = pgTable("map_packs", {
 
 export const dailyLevel = pgTable("daily_level", {
     index: serial().notNull().primaryKey(),
-    level_id: integer().references(() => levels.level_id),
-    next_level_id: integer().references(() => levels.level_id)
+    level_id: integer().references(() => levels.id),
+    next_level_id: integer().references(() => levels.id)
 });
 
 export const dailyLevelHistory = pgTable("daily_level_history", {
     index: serial().notNull().primaryKey(),
-    level_id: integer().notNull().references(() => levels.level_id)
+    level_id: integer().notNull().references(() => levels.id)
 });
 
 /* -------------------------------------------------- */
@@ -220,12 +219,17 @@ export const levelComments = pgTable("level_comments", {
 
 export const usersToLevels = pgTable("users_to_levels", {
     account_id: integer().notNull().references(() => users.account_id),
-    level_id: integer().notNull().references(() => levels.level_id)
+    level_id: integer().notNull().references(() => levels.id)
 }, (t) => [primaryKey({ columns: [t.account_id, t.level_id] })]);
+
+export const levelListsToLevels = pgTable("level_lists_to_levels", {
+    list_id: integer().notNull().references(() => levelLists.id),
+    level_id: integer().notNull().references(() => levels.id)
+}, (t) => [primaryKey({ columns: [t.list_id, t.level_id] })]);
 
 export const mapPacksToLevels = pgTable("map_packs_to_levels", {
     pack_id: integer().notNull().references(() => mapPacks.id),
-    level_id: integer().notNull().references(() => levels.level_id)
+    level_id: integer().notNull().references(() => levels.id)
 }, (t) => [primaryKey({ columns: [t.pack_id, t.level_id] })]);
 
 //////// RELATIONS
@@ -233,20 +237,28 @@ export const mapPacksToLevels = pgTable("map_packs_to_levels", {
 export const relations = defineRelations({
     users,
     levels,
+    levelLists,
     mapPacks,
     usersToLevels,
+    levelListsToLevels,
     mapPacksToLevels
 }, (r) => ({
     users: {
         levels_completed: r.many.levels({
             from: r.users.account_id.through(r.usersToLevels.account_id),
-            to: r.levels.level_id.through(r.usersToLevels.level_id)
+            to: r.levels.id.through(r.usersToLevels.level_id)
+        })
+    },
+    levelLists: {
+        levels: r.many.levels({
+            from: r.levelLists.id.through(r.levelListsToLevels.list_id),
+            to: r.levels.id.through(r.levelListsToLevels.level_id)
         })
     },
     mapPacks: {
         levels: r.many.levels({
             from: r.mapPacks.id.through(r.mapPacksToLevels.pack_id),
-            to: r.levels.level_id.through(r.mapPacksToLevels.level_id)
+            to: r.levels.id.through(r.mapPacksToLevels.level_id)
         })
     }
 }));
