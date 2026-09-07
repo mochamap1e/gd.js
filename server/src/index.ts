@@ -34,6 +34,11 @@ const GDPS = new Elysia({
             if (![null, ""].includes(request.headers.get("User-Agent"))) {
                 return status(403);
             }
+
+            // route /database to / (account endpoints use /database)
+            if (request.url.includes("database")) {
+                return redirect(request.url.replace("/database", ""), 308);
+            }
         },
         afterHandle({ responseValue }) {
             console.log("Response:", responseValue);

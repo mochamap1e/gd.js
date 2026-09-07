@@ -31,7 +31,7 @@ export const getGJAccountComments20 = new Elysia()
                     6, comment.comment_id,
                     8, comment.account_id,
                     9, relativeTimestamp(comment.posted_at)
-                ].join("~"))
+                ].join("~"));
             });
 
             const pageInfo = [

@@ -22,7 +22,7 @@ export const getGJUsers20 = new Elysia()
                 .where(equality);
 
             if (response.length !== 0) {
-                let userObjects: string[] = [];
+                const userObjects: string[] = [];
 
                 response.forEach((user) => {
                     userObjects.push([

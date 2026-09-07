@@ -8,16 +8,16 @@ import { createHash } from "@server/utils/text";
 
 export const getGJMapPacks21 = new Elysia()
     .use(auth)
-    .post("/getGJMapPacks21.php", async ({ body }) => {
+    .post("/getGJMapPacks21.php", async () => {
         try {
             const response = await db.query.mapPacks.findMany({ with: { levels: true } });
 
             //////// build packs
 
-            let packs: string[] = [];
+            const packs: string[] = [];
 
             function object(pack: typeof response[number]) {
-                let levels: number[] = [];
+                const levels: number[] = [];
 
                 pack.levels.forEach((level) => levels.push(level.id));
 
