@@ -18,7 +18,7 @@ export const uploadFriendRequest20 = new Elysia()
                 await db
                     .insert(friendRequests)
                     .values({
-                        to: parseInt(body.toAccountID),
+                        to: body.toAccountID,
                         from: account.account_id,
                         message
                     });
@@ -35,7 +35,7 @@ export const uploadFriendRequest20 = new Elysia()
         commonSecret: true,
         requiresAuthentication: true,
         body: t.Object({
-            toAccountID: t.String(),
+            toAccountID: t.Integer(),
             comment: t.String({ maxLength: 188 })
         })
     });

@@ -11,7 +11,7 @@ export const deleteGJLevelUser20 = new Elysia()
     .post("/deleteGJLevelUser20.php", async ({ body, account }) => {
         const { levelID } = body;
 
-        const equality = eq(levels.id, parseInt(levelID));
+        const equality = eq(levels.id, levelID);
 
         try {
             const query = await db
@@ -36,6 +36,6 @@ export const deleteGJLevelUser20 = new Elysia()
         requiresAuthentication: true,
         levelSecret: true,
         body: t.Object({
-            levelID: t.String()
+            levelID: t.Integer()
         })
     });

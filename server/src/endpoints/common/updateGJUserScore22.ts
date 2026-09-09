@@ -10,14 +10,12 @@ import { GDError } from "@server/utils/errors";
 
 export const updateGJUserScore22 = new Elysia()
     .use(auth)
-    .post("/updateGJUserScore22.php", async ({ body }) => {
-        const { userName } = body;
-
+    .post("/updateGJUserScore22.php", async ({ body, account }) => {
         try {
             const query = await db
                 .select()
                 .from(users)
-                .where(eq(users.username, userName));
+                .where(eq(users.account_id, account.account_id));
 
             const userData = query[0]; if (!userData) return GDError.Generic;
 
@@ -28,31 +26,31 @@ export const updateGJUserScore22 = new Elysia()
         }
     }, {
         commonSecret: true,
+        requiresAuthentication: true,
         body: t.Object({
-            stars: t.String(),
-            moons: t.String(),
-            demons: t.String(),
-            diamonds: t.String(),
-            icon: t.String(),
-            iconType: t.String(),
-            coins: t.String(),
-            userCoins: t.String(),
-            accIcon: t.String(),
-            accShip: t.String(),
-            accBall: t.String(),
-            accBird: t.String(),
-            accDart: t.String(),
-            accRobot: t.String(),
-            accGlow: t.String(),
-            accSpider: t.String(),
-            accExplosion: t.String(),
-            accSwing: t.String(),
-            accJetpack: t.String(),
-            seed2: t.String(),
+            stars: t.Integer(),
+            moons: t.Integer(),
+            demons: t.Integer(),
+            diamonds: t.Integer(),
+            icon: t.Integer(),
+            iconType: t.Integer(),
+            coins: t.Integer(),
+            userCoins: t.Integer(),
+            accIcon: t.Integer(),
+            accShip: t.Integer(),
+            accBall: t.Integer(),
+            accBird: t.Integer(),
+            accDart: t.Integer(),
+            accRobot: t.Integer(),
+            accGlow: t.Integer(),
+            accSpider: t.Integer(),
+            accExplosion: t.Integer(),
+            accSwing: t.Integer(),
+            accJetpack: t.Integer(),
+            seed2: t.String(), // i believe this is a form of a chk, read docs later
             sinfo: t.String(),
-            sinfod: t.String(),
-            sinfog: t.String(),
-            sinfoe: t.String(),
-            userName: t.String()
+            sinfod: t.Integer(),
+            sinfog: t.Integer(),
+            sinfoe: t.Integer()
         })
     });

@@ -9,32 +9,31 @@ import { auth } from "@server/utils/plugins";
 export const uploadGJLevel21 = new Elysia()
     .use(auth)
     .post("/uploadGJLevel21.php", async ({ body, account }) => {
-        const submittedId = parseInt(body.levelID);
+        const submittedId = body.levelID;
 
         let data: typeof levels.$inferInsert = {
-            game_version: parseInt(body.gameVersion),
-            player_id: parseInt(body.accountID!),
-            id: undefined!,
+            game_version: body.gameVersion,
+            player_id: account.account_id,
+            id: undefined,
             level_name: body.levelName,
             description: body.levelDesc,
-            version: parseInt(body.levelVersion),
-            length: parseInt(body.levelLength),
-            official_song: parseInt(body.audioTrack),
-            auto: Boolean(parseInt(body.auto)),
+            version: body.levelVersion,
+            length: body.levelLength,
+            official_song: body.audioTrack,
+            auto: Boolean(body.auto),
             password: body.password,
-            copied_id: parseInt(body.original),
-            two_player: Boolean(parseInt(body.twoPlayer)),
-            custom_song_id: parseInt(body.songID),
-            objects: parseInt(body.objects),
-            coins: parseInt(body.coins),
-            stars_requested: parseInt(body.requestedStars),
-            unlisted: parseInt(body.unlisted),
-            low_detail_mode: Boolean(parseInt(body.ldm)),
+            copied_id: body.original,
+            two_player: Boolean(body.twoPlayer),
+            custom_song_id: body.songID,
+            objects: body.objects,
+            coins: body.coins,
+            stars_requested: body.requestedStars,
+            unlisted: body.unlisted,
+            low_detail_mode: Boolean(body.ldm),
             level_string: body.levelString,
-            editor_time: parseInt(body.wt),
-            editor_time_copies: parseInt(body.wt2),
-            verification_time: parseInt(body.ts),
-            exact_upload_time: Date.now()
+            editor_time: body.wt,
+            editor_time_copies: body.wt2,
+            verification_time: body.ts
         }
 
         try {
@@ -54,6 +53,7 @@ export const uploadGJLevel21 = new Elysia()
                 if (levelData.player_id === account.account_id) {
                     data.id = submittedId;
                     data.version = levelData.version + 1;
+                    data.exact_update_time = Date.now();
 
                     await db
                         .update(levels)
@@ -73,26 +73,26 @@ export const uploadGJLevel21 = new Elysia()
         commonSecret: true,
         requiresAuthentication: true,
         body: t.Object({
-            gameVersion: t.String(),
-            levelID: t.String(),
+            gameVersion: t.Integer(),
+            levelID: t.Integer(),
             levelName: t.String(),
             levelDesc: t.String(),
-            levelVersion: t.String(),
-            levelLength: t.String(),
-            audioTrack: t.String(),
-            auto: t.String(),
+            levelVersion: t.Integer(),
+            levelLength: t.Integer(),
+            audioTrack: t.Integer(),
+            auto: t.Integer(),
             password: t.String(),
-            original: t.String(),
-            twoPlayer: t.String(),
-            songID: t.String(),
-            objects: t.String(),
-            coins: t.String(),
-            requestedStars: t.String(),
-            unlisted: t.String(),
-            ldm: t.String(),
+            original: t.Integer(),
+            twoPlayer: t.Integer(),
+            songID: t.Integer(),
+            objects: t.Integer(),
+            coins: t.Integer(),
+            requestedStars: t.Integer(),
+            unlisted: t.Integer(),
+            ldm: t.Integer(),
             levelString: t.String(),
-            wt: t.String(),
-            wt2: t.String(),
-            ts: t.String()
+            wt: t.Integer(),
+            wt2: t.Integer(),
+            ts: t.Integer()
         })
     });

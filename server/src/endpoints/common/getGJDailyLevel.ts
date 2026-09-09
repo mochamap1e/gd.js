@@ -13,7 +13,7 @@ export const getGJDailyLevel = new Elysia()
         const { chk, type } = body;
 
         // event level requires chk
-        if ((type === "2") && (!chk)) return GDError.Generic;
+        if ((type === 2) && (!chk)) return GDError.Generic;
 
         try {
             const [response] = await db.select().from(dailyLevel).limit(1);
@@ -32,6 +32,6 @@ export const getGJDailyLevel = new Elysia()
         commonSecret: true,
         body: t.Object({
             chk: t.Optional(t.String()),
-            type: t.Union([t.Literal("0"), t.Literal("1"), t.Literal("2")])
+            type: t.Integer({ minimum: 0, maximum: 2 })
         })
     });

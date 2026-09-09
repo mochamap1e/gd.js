@@ -8,8 +8,6 @@ import { common } from "@server/endpoints/common";
 import { accounts } from "@server/endpoints/accounts";
 import { switcher } from "@server/endpoints/switcher";
 
-import { GDError } from "@server/utils/errors";
-
 export function getServerAddress() {
     if (!GDPS.server) return;
     return `https://${GDPS.server.hostname}:${GDPS.server.port}`;
@@ -24,16 +22,22 @@ const GDPS = new Elysia({
         }
     })
 
+    // block invalid requests (no valid ip, has user agent)
+    .resolve(({ request, server, status }) => {
+        const ip = request.headers.get("CF-Connecting-IP") || server?.requestIP(request)?.address;
+        const hasUserAgent = ![null, ""].includes(request.headers.get("User-Agent"));
+
+        if (!ip) { return status(400); }
+        if (hasUserAgent) { return status(403); }
+
+        return { ip };
+    })
+
     // lifecycle
     .guard({
-        beforeHandle({ request, body, status, redirect }) {
+        beforeHandle({ request, body, redirect }) {
             console.log("Requested:", request.url);
             console.log("Body:", body);
-            
-            // require null/blank user agent
-            if (![null, ""].includes(request.headers.get("User-Agent"))) {
-                return status(403);
-            }
 
             // route /database to / (account endpoints use /database)
             if (request.url.includes("database")) {
@@ -45,14 +49,18 @@ const GDPS = new Elysia({
         }
     })
 
-    // cron jobs
-    .use(dailyLevelJob)
-
-    // rate limit
+    // rate limit (2 requests per second)
     .use(rateLimit({
+        // apply rate limit per route instead of across the entire api
+        generator: (request, _, derived) => {
+            return `${request.url} / ${derived.ip}`;
+        },
         duration: 1000,
         max: 2
     }))
+
+    // cron jobs
+    .use(dailyLevelJob)
     
     // endpoints
     .use(common)
@@ -62,4 +70,5 @@ const GDPS = new Elysia({
     // 404 for undefined routes
     .all("*", ({ status }) => { return status(404); })
 
+    // run
     .listen(4500, ({ port }) => console.log("GDPS running on port", port));

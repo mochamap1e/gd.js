@@ -16,7 +16,7 @@ export const getGJUserInfo20 = new Elysia()
             const query = await db
                 .select()
                 .from(users)
-                .where(eq(users.account_id, parseInt(targetAccountID)));
+                .where(eq(users.account_id, targetAccountID));
 
             const targetUserData = query[0]; if (!targetUserData) return GDError.Generic;
 
@@ -29,6 +29,6 @@ export const getGJUserInfo20 = new Elysia()
         commonSecret: true,
         requiresAuthentication: true,
         body: t.Object({
-            targetAccountID: t.String()
+            targetAccountID: t.Integer()
         })
     });

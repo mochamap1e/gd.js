@@ -3,7 +3,7 @@ import { Elysia, t } from "elysia";
 import { Key } from "@server/utils/keys";
 import { auth } from "@server/utils/plugins";
 import { Salt } from "@server/utils/salts";
-import { join, decodeChk, encodeRewardsData } from "@server/utils/text";
+import { decodeChk, encodeRewardsData } from "@server/utils/text";
 
 export const getGJChallenges = new Elysia()
     .use(auth)

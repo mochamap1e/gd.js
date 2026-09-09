@@ -11,7 +11,7 @@ export const deleteGJAccComment20 = new Elysia()
     .post("/deleteGJAccComment20.php", async ({ body, account }) => {
         const { commentID } = body;
 
-        const equality = eq(accountComments.comment_id, parseInt(commentID));
+        const equality = eq(accountComments.comment_id, commentID);
 
         try {
             const query = await db
@@ -36,6 +36,6 @@ export const deleteGJAccComment20 = new Elysia()
         requiresAuthentication: true,
         commonSecret: true,
         body: t.Object({
-            commentID: t.String()
+            commentID: t.Integer()
         })
     });

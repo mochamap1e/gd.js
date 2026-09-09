@@ -78,6 +78,6 @@ export const getGJRewards = new Elysia()
         body: t.Object({
             chk: t.String(),
             udid: t.String(),
-            rewardType: t.String()
+            rewardType: t.Integer()
         })
     });

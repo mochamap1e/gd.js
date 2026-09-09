@@ -14,8 +14,8 @@ export const backupGJAccountNew = new Elysia()
                 .update(users)
                 .set({
                     save_data: body.saveData,
-                    save_data_game_version: parseInt(body.gameVersion),
-                    save_data_binary_version: parseInt(body.binaryVersion)
+                    save_data_game_version: body.gameVersion,
+                    save_data_binary_version: body.binaryVersion
                 })
                 .where(eq(users.account_id, account.account_id));
 
@@ -28,8 +28,8 @@ export const backupGJAccountNew = new Elysia()
         accountSecret: true,
         requiresAuthentication: true,
         body: t.Object({
-            gameVersion: t.String(),
-            binaryVersion: t.String(),
-            saveData: t.String()
+            saveData: t.String(),
+            gameVersion: t.Integer(),
+            binaryVersion: t.Integer()
         })
     });

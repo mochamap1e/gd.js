@@ -27,7 +27,7 @@ todo:
 - fix getGJUsers20 breaking if you search for strings that only partially match usernames
   - for example, if a "lexi" account exists and u search "lex" it acts strange on both the server and client
 
-- add proper type checking to all endpoints
+- add proper type checking to all endpoints (ok i used to think that gd always sent everything as strings but no so fix all of those)
 
 - make every route use the auth plugin cuz every route has a secret anyways
 

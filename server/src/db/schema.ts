@@ -135,7 +135,7 @@ export const levels = pgTable("levels", {
     sfx_ids: integer().array().default([0]),
     song_size: integer().notNull().default(0),
     verification_time: integer().notNull(),
-    exact_upload_time: bigint({ mode: "number" }).notNull(),
+    exact_upload_time: timestamp().notNull().defaultNow(),
     exact_update_time: bigint({ mode: "number" }).notNull().default(0)
 });
 

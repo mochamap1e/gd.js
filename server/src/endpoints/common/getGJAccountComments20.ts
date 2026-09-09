@@ -1,5 +1,5 @@
 import { Elysia, t } from "elysia";
-import { eq } from "drizzle-orm";
+import { eq, desc } from "drizzle-orm";
 
 import { db } from "@server/db/client";
 import { accountComments } from "@server/db/schema";
@@ -13,13 +13,17 @@ export const getGJAccountComments20 = new Elysia()
     .use(auth)
     .post("/getGJAccountComments20.php", async ({ body }) => {
         const { accountID, page } = body;
-        const targetAccountId = accountID[1] ?? accountID;
+
+        const targetAccountId = typeof accountID === "number" ?
+            accountID :
+            accountID[1];
 
         try {
             const query = await db
                 .select()
                 .from(accountComments)
-                .where(eq(accountComments.account_id, parseInt(targetAccountId)));
+                .orderBy(desc(accountComments.posted_at))
+                .where(eq(accountComments.account_id, targetAccountId));
 
             const commentObjects: any[] = [];
 
@@ -53,12 +57,12 @@ export const getGJAccountComments20 = new Elysia()
     }, {
         commonSecret: true,
         body: t.Object({
-            // sometimes the client sends just the target id and sometimes it sends an array like ["client account id", "target's account id"]
+            // sometimes the client sends just the target id and sometimes it sends an array like [client account id, target's account id]
             // not sure why it does that but it's ok
             accountID: t.Union([
-                t.String(),
-                t.Tuple([t.String(), t.String()])
+                t.Integer(),
+                t.Tuple([t.Integer(), t.Integer()])
             ]),
-            page: t.String()
+            page: t.Integer()
         })
     });

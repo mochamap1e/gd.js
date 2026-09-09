@@ -50,7 +50,7 @@ export const auth = new Elysia()
             body: t.Object({
                 gjp2: t.String(),
                 userName: t.Optional(username),
-                accountID: t.Optional(t.String())
+                accountID: t.Optional(t.Integer())
             })
         }
     });

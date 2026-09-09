@@ -13,9 +13,9 @@ export const updateGJAccSettings20 = new Elysia()
             await db
                 .update(users)
                 .set({
-                    message_state: parseInt(body.mS),
-                    friends_state: parseInt(body.frS),
-                    comment_history_state: parseInt(body.cS),
+                    message_state: body.mS,
+                    friends_state: body.frS,
+                    comment_history_state: body.cS,
                     youtube: body.yt,
                     twitter: body.twitter,
                     twitch: body.twitch,
@@ -35,9 +35,9 @@ export const updateGJAccSettings20 = new Elysia()
         accountSecret: true,
         requiresAuthentication: true,
         body: t.Object({
-            mS: t.String(),
-            frS: t.String(),
-            cS: t.String(),
+            mS: t.Integer(),
+            frS: t.Integer(),
+            cS: t.Integer(),
             yt: t.String(),
             twitter: t.String(),
             twitch: t.String(),

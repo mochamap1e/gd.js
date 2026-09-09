@@ -9,7 +9,7 @@ import { auth } from "@server/utils/plugins";
 export const updateGJDesc20 = new Elysia()
     .use(auth)
     .post("/updateGJDesc20.php", async ({ body, account }) => {
-        const equality = eq(levels.id, parseInt(body.levelID));
+        const equality = eq(levels.id, body.levelID);
 
         try {
             const query = await db
@@ -37,7 +37,7 @@ export const updateGJDesc20 = new Elysia()
         commonSecret: true,
         requiresAuthentication: true,
         body: t.Object({
-            levelID: t.String(),
+            levelID: t.Integer(),
             levelDesc: t.String()
         })
     });

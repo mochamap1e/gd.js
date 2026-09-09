@@ -9,6 +9,6 @@ export const getGJLevels21 = new Elysia()
     }, {
         commonSecret: true,
         body: t.Object({
-            type: t.String()
+            type: t.Integer()
         })
     });
