@@ -1,6 +1,5 @@
 import { Elysia } from "elysia";
 
-import { GDError } from "@server/utils/errors";
 import { auth } from "@server/utils/plugins";
 import { encodeAccountLevelsData } from "@server/utils/text";
 
@@ -19,11 +18,10 @@ export const syncGJAccountNew = new Elysia()
                     account.save_data_binary_version
                 ].join(";") + ";;;";
             } else {
-                return GDError.Generic;
+                return -1;
             }
         } catch(error) {
-            console.error("Failed to sync data:", error);
-            return GDError.Generic;
+            return -1;
         }
     }, {
         accountSecret: true,

@@ -4,10 +4,6 @@ export const TypeError = {
     PatternFail: 53
 }
 
-export const GDError = {
-    Generic: -1
-}
-
 export const GDAccountError = {
     UsernameTaken: -2,
     EmailTaken: -3,

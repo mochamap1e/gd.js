@@ -4,7 +4,6 @@ import { eq } from "drizzle-orm";
 import { db } from "@server/db/client";
 import { users } from "@server/db/schema";
 import { auth } from "@server/utils/plugins";
-import { GDError } from "@server/utils/errors";
 
 export const backupGJAccountNew = new Elysia()
     .use(auth)
@@ -21,8 +20,7 @@ export const backupGJAccountNew = new Elysia()
 
             return 1;
         } catch(error) {
-            console.error("Failed to save data:", error);
-            return GDError.Generic;
+            return -1;
         }
     }, {
         accountSecret: true,

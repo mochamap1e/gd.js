@@ -3,7 +3,6 @@ import { eq, desc } from "drizzle-orm";
 
 import { db } from "@server/db/client";
 import { accountComments } from "@server/db/schema";
-import { GDError } from "@server/utils/errors";
 import { auth } from "@server/utils/plugins";
 import { relativeTimestamp } from "@server/utils/text";
 
@@ -51,8 +50,7 @@ export const getGJAccountComments20 = new Elysia()
                 pageInfo
             ].join("#");
         } catch(error) {
-            console.error("Failed to fetch account comments:", error);
-            return GDError.Generic;
+            return -1;
         }
     }, {
         commonSecret: true,

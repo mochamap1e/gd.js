@@ -19,17 +19,7 @@ todo:
 // misc:
 
 - redo schemas
-
 - handle users that are signed out (currently udid and stuff do nothing)
-
 - add weekly and event levels
-
-- fix getGJUsers20 breaking if you search for strings that only partially match usernames
-  - for example, if a "lexi" account exists and u search "lex" it acts strange on both the server and client
-
-- add proper type checking to all endpoints (ok i used to think that gd always sent everything as strings but no so fix all of those)
-
+- add proper type checking to all endpoints
 - make every route use the auth plugin cuz every route has a secret anyways
-
-- make it so i can just throw a 500 status instead of -1 every time, handle it in index.ts to return -1
-  - some errors are actually a status 500 (example on uploadGJAccComment20) so idk, maybe just return -1 for those instead of copying robtop 1:1

@@ -1,7 +1,6 @@
 import { Elysia, t } from "elysia";
 
 import { db } from "@server/db/client";
-import { GDError } from "@server/utils/errors";
 import { auth } from "@server/utils/plugins";
 import { Salt } from "@server/utils/salts";
 import { createHash } from "@server/utils/text";
@@ -63,8 +62,7 @@ export const getGJMapPacks21 = new Elysia()
                 hash
             ].join("#");
         } catch(error) {
-            console.error("Failed to fetch map packs:", error);
-            return GDError.Generic;
+            return -1;
         }
     }, {
         commonSecret: true

@@ -2,7 +2,6 @@ import { Elysia, t } from "elysia";
 
 import { db } from "@server/db/client";
 import { accountComments } from "@server/db/schema";
-import { GDError } from "@server/utils/errors";
 import { hasObscenity } from "@server/utils/obscenity";
 import { auth } from "@server/utils/plugins";
 import { decodeB64 } from "@server/utils/text";
@@ -25,11 +24,10 @@ export const uploadGJAccComment20 = new Elysia()
 
                 return response!.commentId;
             } catch(error) {
-                console.error("Failed to upload account comment", error);
-                return GDError.Generic;
+                return -1;
             }
         } else {
-            return GDError.Generic;
+            return -1;
         }
     }, {
         commonSecret: true,

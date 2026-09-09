@@ -4,7 +4,6 @@ import { getDailyLevelTimeRemaining } from "@server/cron/dailyLevel";
 
 import { db } from "@server/db/client";
 import { dailyLevel } from "@server/db/schema";
-import { GDError } from "@server/utils/errors";
 import { auth } from "@server/utils/plugins";
 
 export const getGJDailyLevel = new Elysia()
@@ -13,12 +12,12 @@ export const getGJDailyLevel = new Elysia()
         const { chk, type } = body;
 
         // event level requires chk
-        if ((type === 2) && (!chk)) return GDError.Generic;
+        if ((type === 2) && (!chk)) return -1;
 
         try {
             const [response] = await db.select().from(dailyLevel).limit(1);
             
-            if (!response) return GDError.Generic;
+            if (!response) return -1;
 
             const currentLevelIndex = response.index;
             const timeRemaining = getDailyLevelTimeRemaining();
@@ -26,7 +25,7 @@ export const getGJDailyLevel = new Elysia()
             return `${currentLevelIndex}|${timeRemaining}`;
         } catch(error) {
             console.error("Error fetching daily level:", error);
-            return GDError.Generic;
+            return -1;
         }
     }, {
         commonSecret: true,

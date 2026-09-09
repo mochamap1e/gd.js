@@ -1,7 +1,6 @@
 import { Elysia, t } from "elysia";
 import { randomInt } from "mathjs";
 
-import { GDError } from "@server/utils/errors";
 import { Key } from "@server/utils/keys";
 import { auth } from "@server/utils/plugins";
 import { Salt } from "@server/utils/salts";
@@ -75,13 +74,13 @@ export const getGJSecretReward = new Elysia()
         if (rewardsData) {
             return encodeRewardsData(rewardsData, Key.ChestReward, Salt.Reward);
         } else {
-            return GDError.Generic;
+            return -1;
         }
     }, {
         commonSecret: true,
         requiresAuthentication: true,
         body: t.Object({
             chk: t.String(),
-            rewardKey: t.String({ minLength: 1, maxLength: 100, error() { return GDError.Generic; } })
+            rewardKey: t.String({ minLength: 1, maxLength: 100, error() { return -1; } })
         })
     });

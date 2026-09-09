@@ -3,12 +3,11 @@ import { eq } from "drizzle-orm";
 
 import { db } from "@server/db/client";
 import { users } from "@server/db/schema";
-import { GDError } from "@server/utils/errors";
 import { username } from "@server/utils/types";
 
 function secret(secret: string) {
     return t.Object({
-        secret: t.Literal(secret, { error() { return GDError.Generic; } })
+        secret: t.Literal(secret, { error() { return -1; } })
     })
 }
 

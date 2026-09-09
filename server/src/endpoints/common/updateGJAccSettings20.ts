@@ -3,7 +3,6 @@ import { eq } from "drizzle-orm";
 
 import { db } from "@server/db/client";
 import { users } from "@server/db/schema";
-import { GDError } from "@server/utils/errors";
 import { auth } from "@server/utils/plugins";
 
 export const updateGJAccSettings20 = new Elysia()
@@ -28,8 +27,7 @@ export const updateGJAccSettings20 = new Elysia()
 
             return 1;
         } catch(error) {
-            console.error("Failed to update account settings:", error);
-            return GDError.Generic;
+            return -1;
         }
     }, {
         accountSecret: true,

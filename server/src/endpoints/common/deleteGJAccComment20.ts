@@ -3,7 +3,6 @@ import { eq } from "drizzle-orm";
 
 import { db } from "@server/db/client";
 import { accountComments } from "@server/db/schema";
-import { GDError } from "@server/utils/errors";
 import { auth } from "@server/utils/plugins";
 
 export const deleteGJAccComment20 = new Elysia()
@@ -21,8 +20,8 @@ export const deleteGJAccComment20 = new Elysia()
 
             const targetComment = query[0];
 
-            if (!targetComment) return GDError.Generic;
-            if (targetComment.account_id !== account.account_id) return GDError.Generic;
+            if (!targetComment) return -1;
+            if (targetComment.account_id !== account.account_id) return -1;
 
             await db
                 .delete(accountComments)
@@ -30,7 +29,7 @@ export const deleteGJAccComment20 = new Elysia()
 
             return 1;
         } catch(error) {
-            console.error("Failed to delete account comment:", error);
+            return -1;
         }
     }, {
         requiresAuthentication: true,

@@ -5,7 +5,7 @@ import { db } from "@server/db/client";
 import { users } from "@server/db/schema";
 import { auth } from "@server/utils/plugins";
 import { username } from "@server/utils/types";
-import { TypeError, GDError, GDAccountError } from "@server/utils/errors";
+import { TypeError, GDAccountError } from "@server/utils/errors";
 
 function generateGJP2(string: string) {
     return crypto.createHash("sha1").update(string += "mI29fmAnxgTs").digest("hex");
@@ -36,13 +36,13 @@ export const registerGJAccount = new Elysia()
                     case "user_email_unique":
                         return GDAccountError.EmailTaken;
                     default:
-                        return GDError.Generic;
+                        return -1;
                 }
             }
 
             console.error("Error registering user:", error);
 
-            return GDError.Generic;
+            return -1;
         }
     }, {
         accountSecret: true,
@@ -53,23 +53,23 @@ export const registerGJAccount = new Elysia()
                 maxLength: 20,
                 pattern: "^[a-zA-Z0-9_-]+$",
                 error({ errors }) {
-                    const error = errors[0]; if (!error) return GDError.Generic;
+                    const error = errors[0]; if (!error) return -1;
 
                     if (error.type === TypeError.StringTooShort) return GDAccountError.PasswordTooShort;
                     if (error.type === TypeError.StringTooLong || error.type === TypeError.PatternFail) return GDAccountError.PasswordInvalid;
 
-                    return GDError.Generic;
+                    return -1;
                 }
             }),
             email: t.String({
                 maxLength: 50,
                 pattern: "^[a-zA-Z0-9_-]+@gmail\.com$",
                 error({ errors }) {
-                    const error = errors[0]; if (!error) return GDError.Generic;
+                    const error = errors[0]; if (!error) return -1;
 
                     if (error.type === TypeError.StringTooLong || error.type === TypeError.PatternFail) return GDAccountError.EmailInvalid;
 
-                    return GDError.Generic;
+                    return -1;
                 }
             })
         })

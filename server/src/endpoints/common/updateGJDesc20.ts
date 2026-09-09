@@ -3,7 +3,6 @@ import { eq } from "drizzle-orm";
 
 import { db } from "@server/db/client";
 import { levels } from "@server/db/schema";
-import { GDError } from "@server/utils/errors";
 import { auth } from "@server/utils/plugins";
 
 export const updateGJDesc20 = new Elysia()
@@ -17,7 +16,7 @@ export const updateGJDesc20 = new Elysia()
                 .from(levels)
                 .where(equality);
 
-            const levelData = query[0]; if(!levelData) return GDError.Generic;
+            const levelData = query[0]; if(!levelData) return -1;
 
             if (levelData.player_id === account.account_id) {
                 await db
@@ -27,11 +26,11 @@ export const updateGJDesc20 = new Elysia()
 
                 return 1;
             } else {
-                return GDError.Generic;
+                return -1;
             }
         } catch(error) {
             console.error("Error updating level description:", error);
-            return GDError.Generic;
+            return -1;
         }
     }, {
         commonSecret: true,

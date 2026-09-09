@@ -3,7 +3,6 @@ import { eq } from "drizzle-orm";
 
 import { db } from "@server/db/client";
 import { levels } from "@server/db/schema";
-import { GDError } from "@server/utils/errors";
 import { auth } from "@server/utils/plugins";
 
 export const deleteGJLevelUser20 = new Elysia()
@@ -21,8 +20,8 @@ export const deleteGJLevelUser20 = new Elysia()
 
             const targetLevel = query[0];
 
-            if (!targetLevel) return GDError.Generic; // level does not exist
-            if (targetLevel.player_id !== account.account_id) return GDError.Generic; // user does not own level
+            if (!targetLevel) return -1; // level does not exist
+            if (targetLevel.player_id !== account.account_id) return -1; // user does not own level
 
             await db
                 .delete(levels)
@@ -30,7 +29,7 @@ export const deleteGJLevelUser20 = new Elysia()
 
             return 1;
         } catch(error) {
-            console.error("Failed to delete level:", error);
+            return -1;
         }
     }, {
         requiresAuthentication: true,

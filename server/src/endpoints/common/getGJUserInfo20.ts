@@ -4,7 +4,6 @@ import { eq } from "drizzle-orm";
 import { db } from "@server/db/client";
 import { users } from "@server/db/schema";
 import { auth } from "@server/utils/plugins";
-import { GDError } from "@server/utils/errors";
 import { createUserObject } from "@server/utils/objects/user";
 
 export const getGJUserInfo20 = new Elysia()
@@ -18,12 +17,11 @@ export const getGJUserInfo20 = new Elysia()
                 .from(users)
                 .where(eq(users.account_id, targetAccountID));
 
-            const targetUserData = query[0]; if (!targetUserData) return GDError.Generic;
+            const targetUserData = query[0]; if (!targetUserData) return -1;
 
             return createUserObject(targetUserData);
         } catch(error) {
-            console.error("Failed to get user info:", error);
-            return GDError.Generic;
+            return -1;
         }
     }, {
         commonSecret: true,

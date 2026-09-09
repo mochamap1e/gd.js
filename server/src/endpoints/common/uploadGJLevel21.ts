@@ -3,7 +3,6 @@ import { eq } from "drizzle-orm";
 
 import { db } from "@server/db/client";
 import { levels } from "@server/db/schema";
-import { GDError } from "@server/utils/errors";
 import { auth } from "@server/utils/plugins";
 
 export const uploadGJLevel21 = new Elysia()
@@ -48,7 +47,7 @@ export const uploadGJLevel21 = new Elysia()
                     .from(levels)
                     .where(equality);
 
-                const levelData = query[0]; if(!levelData) return GDError.Generic;
+                const levelData = query[0]; if(!levelData) return -1;
 
                 if (levelData.player_id === account.account_id) {
                     data.id = submittedId;
@@ -62,12 +61,12 @@ export const uploadGJLevel21 = new Elysia()
 
                     return submittedId;
                 } else {
-                    return GDError.Generic;
+                    return -1;
                 }
             }
         } catch(error) {
             console.log("Error uploading level:", error);
-            return GDError.Generic;
+            return -1;
         }
     }, {
         commonSecret: true,

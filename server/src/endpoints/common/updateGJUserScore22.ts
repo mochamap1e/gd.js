@@ -4,7 +4,6 @@ import { eq } from "drizzle-orm";
 import { db } from "@server/db/client";
 import { users } from "@server/db/schema";
 import { auth } from "@server/utils/plugins";
-import { GDError } from "@server/utils/errors";
 
 // todo: make this actually do something
 
@@ -17,12 +16,12 @@ export const updateGJUserScore22 = new Elysia()
                 .from(users)
                 .where(eq(users.account_id, account.account_id));
 
-            const userData = query[0]; if (!userData) return GDError.Generic;
+            const userData = query[0]; if (!userData) return -1;
 
             return userData.user_id;
         } catch(error) {
             console.error("Failed fetch user:", error);
-            return GDError.Generic;
+            return -1;
         }
     }, {
         commonSecret: true,
