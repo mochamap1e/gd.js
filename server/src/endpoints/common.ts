@@ -13,6 +13,7 @@ import { getGJRewards } from "@server/endpoints/common/getGJRewards";
 import { getGJSecretReward } from "@server/endpoints/common/getGJSecretReward";
 import { getGJUserInfo20 } from "@server/endpoints/common/getGJUserInfo20";
 import { getGJUsers20 } from "@server/endpoints/common/getGJUsers20";
+import { likeGJItem211 } from "@server/endpoints/common/likeGJItem211";
 import { updateGJAccSettings20 } from "@server/endpoints/common/updateGJAccSettings20";
 import { updateGJDesc20 } from "@server/endpoints/common/updateGJDesc20";
 import { updateGJUserScore22 } from "@server/endpoints/common/updateGJUserScore22";
@@ -34,6 +35,7 @@ export const common = new Elysia()
     .use(getGJSecretReward)
     .use(getGJUserInfo20)
     .use(getGJUsers20)
+    .use(likeGJItem211)
     .use(updateGJAccSettings20)
     .use(updateGJDesc20)
     .use(updateGJUserScore22)

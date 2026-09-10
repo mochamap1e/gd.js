@@ -191,7 +191,6 @@ export const accountComments = pgTable("account_comments", {
     comment: varchar().notNull(),
 
     likes: integer().notNull().default(0),
-    dislikes: integer().notNull().default(0),
 
     posted_at: timestamp().notNull().defaultNow()
 });
@@ -205,7 +204,6 @@ export const levelComments = pgTable("level_comments", {
     comment: varchar().notNull(),
 
     likes: integer().notNull().default(0),
-    dislikes: integer().notNull().default(0),
 
     spam: boolean().notNull().default(false)
 });
