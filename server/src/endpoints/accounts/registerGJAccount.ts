@@ -1,12 +1,12 @@
 import crypto from "crypto";
 import { Elysia, t } from "elysia";
 
+import { getServerAddress } from "@server/index";
 import { db } from "@server/db/client";
 import { users } from "@server/db/schema";
 import { auth } from "@server/utils/plugins";
 import { generateGJP2 } from "@server/utils/text";
 import { username } from "@server/utils/types";
-import { config } from "@server/lib/config";
 import { sendVerificationEmail } from "@server/lib/resend";
 import { TypeError, GDAccountError } from "@server/utils/errors";
 
@@ -30,7 +30,7 @@ export const registerGJAccount = new Elysia()
             await sendVerificationEmail(
                 email,
                 userName,
-                `https://${config.get("domain")}/accounts/verify?code=${verificationCode}`
+                `${getServerAddress()}/accounts/verify?code=${verificationCode}`
             );
 
             return 1;
@@ -39,9 +39,9 @@ export const registerGJAccount = new Elysia()
 
             if (constraint) {
                 switch (constraint) {
-                    case "user_username_unique":
+                    case "users_username_key":
                         return GDAccountError.UsernameTaken;
-                    case "user_email_unique":
+                    case "users_email_key":
                         return GDAccountError.EmailTaken;
                     default:
                         return -1;

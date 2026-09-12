@@ -10,9 +10,13 @@ import { common } from "@server/endpoints/common";
 import { accounts } from "@server/endpoints/accounts";
 import { switcher } from "@server/endpoints/switcher";
 
+process.env.NODE_ENV = process.argv.includes("--dev") ? "dev" : "prod";
+
 export function getServerAddress() {
     if (!GDPS.server) return;
-    return `https://${GDPS.server.hostname}:${GDPS.server.port}`;
+    return `https://` + (process.env.NODE_ENV === "dev" ?
+        `${GDPS.server.hostname}:${GDPS.server.port}` :
+        config.get("domain"));
 }
 
 const GDPS = new Elysia()
@@ -69,6 +73,6 @@ const GDPS = new Elysia()
 
     // run
     .listen({
-        port: config.get("port"),
+        port: config.get("server_port"),
         hostname: config.get("host")
     }, ({ port, hostname }) => console.log(`GDPS running at ${hostname}:${port}`));

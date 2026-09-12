@@ -1,12 +1,12 @@
 import { Elysia } from "elysia";
 
-import { auth } from "@server/utils/plugins";
 import { getServerAddress } from "@server/index";
+import { auth } from "@server/utils/plugins";
 
 export const getAccountURL = new Elysia()
     .use(auth)
-    .post("/getAccountURL.php", (): string | number => {
-        return getServerAddress() ?? -1;
+    .post("/getAccountURL.php", (): any => {
+        return getServerAddress();
     }, {
         commonSecret: true
     });

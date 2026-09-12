@@ -7,8 +7,9 @@ export const config = new conf({
     cwd: "./",
     fileExtension: "conf",
     defaults: {
-        port: 3000,
-        host: "127.0.0.1",
+        host: "0.0.0.0",
+        server_port: 3000,
+        website_port: 4000,
         domain: "example.com",
         gdps_name: "Example GDPS",
         gdps_icon: "https://raw.githubusercontent.com/Kingminer7/gdps-switcher/refs/heads/main/resources/gdlogo.png",
