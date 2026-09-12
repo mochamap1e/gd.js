@@ -15,13 +15,15 @@
         "@elysia/jwt": "^1.4.2",
         "@elysiajs/static": "^1.4.10",
         "argon2": "^0.45.1",
+        "conf": "^15.1.0",
         "dayjs": "^1.11.23",
         "dotenv": "^17.4.2",
         "drizzle-orm": "^1.0.0-rc.4",
         "elysia-rate-limit": "4.6.3",
         "mathjs": "^15.2.0",
         "obscenity": "^0.4.6",
-        "pg": "^8.23.0"
+        "pg": "^8.23.0",
+        "resend": "^6.28.0"
     },
     "devDependencies": {
         "@types/bun": "^1.4.0",

@@ -4,12 +4,11 @@ import { Elysia, t } from "elysia";
 import { db } from "@server/db/client";
 import { users } from "@server/db/schema";
 import { auth } from "@server/utils/plugins";
+import { generateGJP2 } from "@server/utils/text";
 import { username } from "@server/utils/types";
+import { config } from "@server/lib/config";
+import { sendVerificationEmail } from "@server/lib/resend";
 import { TypeError, GDAccountError } from "@server/utils/errors";
-
-function generateGJP2(string: string) {
-    return crypto.createHash("sha1").update(string += "mI29fmAnxgTs").digest("hex");
-}
 
 export const registerGJAccount = new Elysia()
     .use(auth)
@@ -17,13 +16,22 @@ export const registerGJAccount = new Elysia()
         let { userName, password, email } = body;
 
         try {
+            const verificationCode = crypto.randomUUID().replaceAll("-", "");
+
             password = generateGJP2(password);
 
             await db.insert(users).values({
                 username: userName,
                 password,
-                email
+                email,
+                verification_code: verificationCode
             });
+
+            await sendVerificationEmail(
+                email,
+                userName,
+                `https://${config.get("domain")}/accounts/verify?code=${verificationCode}`
+            );
 
             return 1;
         } catch(error: any) {
@@ -63,7 +71,7 @@ export const registerGJAccount = new Elysia()
             }),
             email: t.String({
                 maxLength: 50,
-                pattern: "^[a-zA-Z0-9_-]+@gmail\.com$",
+                pattern: "^[a-zA-Z0-9._-]+@gmail\.com$",
                 error({ errors }) {
                     const error = errors[0]; if (!error) return -1;
 

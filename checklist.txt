@@ -18,7 +18,7 @@ todo:
 
 // misc:
 
-- redo schemas
+- redo schemas (and fix the level counts)
 - handle users that are signed out (currently udid and stuff do nothing)
 - add weekly and event levels
 - add proper type checking to all endpoints

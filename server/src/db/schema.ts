@@ -17,6 +17,9 @@ export const users = pgTable("users", {
     custom: varchar(),
     is_registered: boolean().notNull().default(true),
 
+    email_verified: boolean().notNull().default(false),
+    verification_code: varchar().notNull(),
+
     // stats
     stars: integer().notNull().default(0),
     moons: integer().notNull().default(0),
@@ -26,7 +29,7 @@ export const users = pgTable("users", {
     secret_coins: integer().notNull().default(0),
     user_coins: integer().notNull().default(0),
 
-    // level counts
+    // level counts REDO THESE
     demons: varchar().notNull().default("0,0,0,0,0,0,0,0,0,0,0,0"),
     classic_levels: varchar().notNull().default("0,0,0,0,0,0,0,0"),
     platformer_levels: varchar().notNull().default("0,0,0,0,0,0"),

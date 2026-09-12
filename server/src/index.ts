@@ -1,6 +1,8 @@
-import fs from "fs";
 import { Elysia } from "elysia";
 import { rateLimit } from "elysia-rate-limit";
+import { staticPlugin } from "@elysiajs/static"
+
+import { config } from "@server/lib/config";
 
 import { dailyLevelJob } from "@server/cron/dailyLevel";
 
@@ -13,22 +15,17 @@ export function getServerAddress() {
     return `https://${GDPS.server.hostname}:${GDPS.server.port}`;
 }
 
-const GDPS = new Elysia({
-        serve: {
-            tls: {
-                cert: fs.readFileSync("certs/cert.pem"),
-                key: fs.readFileSync("certs/key.pem")
-            }
-        }
-    })
-
+const GDPS = new Elysia()
     // block invalid requests (no valid ip, has user agent)
     .resolve(({ request, server, status }) => {
+        const url = new URL(request.url);
         const ip = request.headers.get("CF-Connecting-IP") || server?.requestIP(request)?.address;
         const hasUserAgent = ![null, ""].includes(request.headers.get("User-Agent"));
 
+        const userAgentExcludedRoutes = ["/accounts/verify"];
+
         if (!ip) { return status(400); }
-        if (hasUserAgent) { return status(403); }
+        if (hasUserAgent && !userAgentExcludedRoutes.includes(url.pathname)) { return status(403); }
 
         return { ip };
     })
@@ -71,4 +68,7 @@ const GDPS = new Elysia({
     .all("*", ({ status }) => { return status(404); })
 
     // run
-    .listen(4500, ({ port }) => console.log("GDPS running on port", port));
+    .listen({
+        port: config.get("port"),
+        hostname: config.get("host")
+    }, ({ port, hostname }) => console.log(`GDPS running at ${hostname}:${port}`));

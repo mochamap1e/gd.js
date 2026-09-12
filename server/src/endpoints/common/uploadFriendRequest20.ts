@@ -2,7 +2,7 @@ import { Elysia, t } from "elysia";
 
 import { db } from "@server/db/client";
 import { friendRequests } from "@server/db/schema";
-import { hasObscenity } from "@server/utils/obscenity";
+import { hasObscenity } from "@server/lib/obscenity";
 import { auth } from "@server/utils/plugins";
 import { decodeB64 } from "@server/utils/text";
 

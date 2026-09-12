@@ -1,6 +1,8 @@
 import crypto from "crypto";
 import { deflateSync } from "zlib";
 
+import { Salt } from "@server/utils/salts";
+
 export function createHash(data: string, salt: string) {
     return crypto
         .createHash("sha1")
@@ -30,6 +32,10 @@ export function randomString(chars: number) {
     }
 
     return string;
+}
+
+export function generateGJP2(string: string) {
+    return crypto.createHash("sha1").update(string += Salt.GJP2).digest("hex");
 }
 
 export function decodeChk(chk: string, xorKey: string) {
