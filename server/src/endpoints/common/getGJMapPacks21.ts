@@ -27,8 +27,8 @@ export const getGJMapPacks21 = new Elysia()
                     4, pack.stars,
                     5, pack.coins,
                     6, pack.difficulty,
-                    7, pack.text_color,
-                    8, pack.bar_color
+                    7, pack.bar_color,
+                    8, pack.text_color
                 ].join(":");
             }
             
