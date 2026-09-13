@@ -81,6 +81,15 @@ export const users = pgTable("users", {
     created_at: timestamp().notNull().defaultNow()
 });
 
+export const friendships = pgTable("friendships", {
+    id: serial().notNull(),
+    
+    a: integer().notNull().references(() => users.account_id),
+    b: integer().notNull().references(() => users.account_id),
+
+    created_at: timestamp().notNull().defaultNow()
+}, (t) => [primaryKey({ columns: [t.a, t.b] })]);
+
 export const friendRequests = pgTable("friend_requests", {
     id: serial().notNull(),
 
@@ -194,6 +203,7 @@ export const accountComments = pgTable("account_comments", {
     comment: varchar().notNull(),
 
     likes: integer().notNull().default(0),
+    dislikes: integer().notNull().default(0),
 
     posted_at: timestamp().notNull().defaultNow()
 });

@@ -46,7 +46,7 @@ export const getGJUserInfo20 = new Elysia()
                 28, user.acc_glow,
                 29, user.is_registered,
                 30, 0, // TEMPORARY, GLOBAL RANK
-                31, 1, // TEMPORARY
+                //31, 1, // TEMPORARY
                 43, user.acc_spider,
                 44, user.twitter,
                 45, user.twitch,
