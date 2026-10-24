@@ -1,9 +1,0 @@
-DROP SCHEMA public CASCADE;
-CREATE SCHEMA public;
-
-- redo schemas (and fix the level counts)
-- handle users that are signed out (currently udid and stuff do nothing)
-- add weekly and event levels
-- add proper type checking to all endpoints
-- add pagination
-- make every route use the auth plugin cuz every route has a secret anyways

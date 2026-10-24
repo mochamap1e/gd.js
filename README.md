@@ -1,8 +1,22 @@
 # gd.js
 
-A Geometry Dash 2.2081 private server made in TypeScript. Not to be confused with [101arrowz's gd.js](https://github.com/101arrowz/gd.js).
+A Geometry Dash private server written in TypeScript, supporting the latest version of the game (2.2091).
 
-The server uses the [Elysia](https://elysiajs.com/) framework with PostgreSQL and Drizzle ORM for the database.
-The panel uses the [Astro](https://astro.build/) framework with the [Tabler](https://tabler.io/) component library.
+## Usage
+Go to [releases](https://github.com/mochamap1e/gd.js/releases/latest) and download the latest version for your server's platform.
 
-This project entirely relies on [boomlings.dev](https://boomlings.dev/) for documentation on the GD backend. All credit for reverse engineering goes to them.
+Run the program once, then `server.conf` will be created. Configure the server in this file, rerun the program, and you will be up and running!
+
+## Building
+Install [Bun](https://bun.com/get) on your machine, then run these commands:
+
+Install dependencies:
+```
+bun ci
+```
+
+Build for all platforms:
+```
+bun run build
+```
+The compiled programs will be in the `dist` folder.
