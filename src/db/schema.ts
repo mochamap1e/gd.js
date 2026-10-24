@@ -4,5 +4,6 @@ export const users = sqliteTable("users", {
     id: int().primaryKey({ autoIncrement: true }),
     name: text().notNull(),
     age: int().notNull(),
-    email: text().notNull().unique()
+    email: text().notNull().unique(),
+    temp: text().notNull()
 });

@@ -1,7 +1,7 @@
 {
   "version": "7",
   "dialect": "sqlite",
-  "id": "e1463688-2f0a-4756-9db8-15a0afc46105",
+  "id": "ebe54c05-112c-4786-b6d2-1a9c44c13793",
   "prevIds": [
     "00000000-0000-0000-0000-000000000000"
   ],
@@ -43,6 +43,16 @@
     {
       "table": "users",
       "name": "email",
+      "type": "text",
+      "notNull": true,
+      "autoincrement": false,
+      "default": null,
+      "generated": null,
+      "entityType": "columns"
+    },
+    {
+      "table": "users",
+      "name": "temp",
       "type": "text",
       "notNull": true,
       "autoincrement": false,

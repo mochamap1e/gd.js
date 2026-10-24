@@ -16,7 +16,7 @@ export const config = new Conf({
 });
 
 if (firstRun) {
-    console.warn("It appears it is your first time running the server. Please edit the config and rerun!");
+    console.warn("It appears it is your first time running the server. Please edit server.conf and rerun!");
     console.log("");
     console.log("Press any key to exit...");
 
