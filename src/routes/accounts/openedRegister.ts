@@ -1,18 +1,17 @@
 import Elysia from "elysia";
 
 import { gd } from "@server/middleware";
-import { Secrets } from "@server/constants";
 import { generateHex } from "@server/lib/text";
 import { registerSessions } from "@server/lib/sessions";
 
 export const openedRegister = new Elysia()
     .use(gd)
-    .post("/openedRegister.php", ({ body }) => {
-        const session = generateHex(32);
+    .post("/accounts/openedRegister.php", ({ body }) => {
+        const token = generateHex(32);
 
-        registerSessions.push(session);
+        registerSessions.push({ token, timestamp: Date.now()  });
 
-        return session;
+        return token;
     }, {
-        secret: Secrets.Account
+        secret: "Account"
     });

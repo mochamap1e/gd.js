@@ -7,6 +7,9 @@ Go to [releases](https://github.com/mochamap1e/gd.js/releases/latest) and downlo
 
 Run the program once, then `server.conf` will be created. Configure the server in this file, rerun the program, and you will be up and running!
 
+## Docs
+[Account Activation Setup](docs/account-activation.md)
+
 ## Building
 Install [Bun](https://bun.com/get) on your machine, then run these commands:
 

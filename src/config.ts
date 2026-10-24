@@ -10,7 +10,13 @@ export const config = new Conf({
     cwd: "./",
     defaults: {
         host: "0.0.0.0",
-        port: 3000
+        port: 3000,
+        gdps_name: "Example GDPS",
+        gdps_url: "https://yourgdps.com",
+        require_account_activation: false,
+        resend_api_key: "only_required_for_account_activation",
+        resend_template_id: "account-activation",
+        resend_email: "Example GDPS <noreply@yourgdps.com>"
     }
 });
 

@@ -5,29 +5,34 @@ import { runMigration } from "@server/db/migrate";
 
 import { accounts } from "@server/routes/accounts";
 
-await runMigration();
+if (Bun.isStandaloneExecutable) { await runMigration(); }
 
-new Elysia({
+const GDPS = new Elysia({
     serve: {
         hostname: config.get("host")
     }
 })
+    // block requests with a user agent
+    .resolve(({ request, status }) => {
+        const url = new URL(request.url);
+        const hasUserAgent = ![null, ""].includes(request.headers.get("User-Agent"));
 
-    // lifecycle
+        const excludedRoutes = ["/accounts/activate"];
 
-    .guard({
-        beforeHandle({ request, body, redirect }) {
-            console.log("Requested:", request.url);
-            console.log("Body:", body);
-        },
-        afterHandle({ responseValue }) {
-            console.log("Response:", responseValue);
+        if (hasUserAgent && !excludedRoutes.includes(url.pathname)) {
+            return status(403);
         }
     })
 
-    .onError(({ set }) => {
-        set.status = 200;
-        return -1;
+    // lifecycle
+    .onRequest(async ({ request }) => {
+        const url = new URL(request.url);
+        console.log("Requested:", request.method, url.pathname + url.search);
+        try {
+            //console.log("Body:", await request.clone().text());
+        } catch {
+            console.log("Body: <unreadable>");
+        }
     })
 
     // routes
