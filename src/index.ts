@@ -3,6 +3,8 @@ import Elysia from "elysia";
 import { config } from "@server/config";
 import { runMigration } from "@server/db/migrate";
 
+import { accounts } from "@server/routes/accounts";
+
 await runMigration();
 
 new Elysia({
@@ -10,8 +12,26 @@ new Elysia({
         hostname: config.get("host")
     }
 })
+
+    // lifecycle
+
+    .guard({
+        beforeHandle({ request, body, redirect }) {
+            console.log("Requested:", request.url);
+            console.log("Body:", body);
+        },
+        afterHandle({ responseValue }) {
+            console.log("Response:", responseValue);
+        }
+    })
+
+    .onError(({ set }) => {
+        set.status = 200;
+        return -1;
+    })
+
     // routes
-    .get("/", () => "hi")
+    .use(accounts)
 
     // run
     .listen(

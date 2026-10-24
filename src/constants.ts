@@ -2,4 +2,8 @@ export const Secrets = {
     Common: "Wmfd2893gb7",
     Account: "Wmfv3899gc9",
     Level: "Wmfv2898gc9"
-};
+} as const;
+
+export const Salts = {
+    GJP2: "mI29fmAnxgTs"
+}

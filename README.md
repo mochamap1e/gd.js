@@ -15,7 +15,10 @@ Install dependencies:
 bun ci
 ```
 
-Build for all platforms:
+Generate database migrations then build for all platforms:
+```
+bun generate 
+```
 ```
 bun run build
 ```

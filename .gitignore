@@ -1,5 +1,6 @@
 node_modules/
+drizzle/
 .bun-cache/
+data/
 dist/
-*.db
 *.conf

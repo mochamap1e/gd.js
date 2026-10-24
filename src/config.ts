@@ -10,8 +10,7 @@ export const config = new Conf({
     cwd: "./",
     defaults: {
         host: "0.0.0.0",
-        port: 3000,
-        db_name: "database.db"
+        port: 3000
     }
 });
 
