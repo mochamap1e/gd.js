@@ -4,6 +4,8 @@ import { config } from "@server/config";
 import { runMigration } from "@server/db/migrate";
 
 import { accounts } from "@server/routes/accounts";
+import { misc } from "@server/routes/misc";
+import { songs } from "@server/routes/songs";
 import { users } from "@server/routes/users";
 
 if (Bun.isStandaloneExecutable) { await runMigration(); }
@@ -38,6 +40,8 @@ const GDPS = new Elysia({
 
     // routes
     .use(accounts)
+    .use(misc)
+    .use(songs)
     .use(users)
 
     // run

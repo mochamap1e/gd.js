@@ -6,7 +6,7 @@ import { accounts } from "@server/db/schema";
 
 export const activate = new Elysia()
     .get("/accounts/activate", async ({ request, status }) => {
-        const url = new URL(request.url)
+        const url = new URL(request.url);
         const token = url.searchParams.get("token");
 
         if (token) {

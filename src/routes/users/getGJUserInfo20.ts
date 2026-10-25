@@ -16,7 +16,7 @@ export const getGJUserInfo20 = new Elysia()
                 .where(eq(accounts.account_id, body.targetAccountID));
             
             if (account) {
-                const r = [
+                return [
                     1, account.username,
                     2, account.account_id,
                     3, account.stars,
@@ -66,8 +66,6 @@ export const getGJUserInfo20 = new Elysia()
                     67, 0, // TEMP FOLLOWERS
                     69, false // TEMP ISFOLLOWING
                 ].join(":");
-                console.log(r);
-                return r;
             } else {
                 return -1;
             }
