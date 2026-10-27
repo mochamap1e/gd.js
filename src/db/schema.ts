@@ -68,17 +68,21 @@ export const accounts = pgTable("accounts", {
 
 export const levels = pgTable("levels", {
     id: integer().primaryKey().generatedByDefaultAsIdentity(),
-    author: integer().notNull().references(() => accounts.id),
-    version: integer().notNull().default(1),
-
     name: text().notNull(),
     description: text(),
-    levelString: text().notNull(),
+    version: integer().notNull().default(1),
+    length: integer().notNull(),
+
+    author: integer().notNull().references(() => accounts.id),
+    
+
+    
+    string: text().notNull(),
 
     difficulty_denominator: integer().notNull().default(0),
     difficulty_numerator: integer().notNull().default(0),
     demon: boolean().notNull().default(false),
-    length: integer().notNull(),
+    
 
     downloads: integer().notNull().default(0),
     likes: integer().notNull().default(0),
