@@ -1,0 +1,3 @@
+- use optional account flag in getgjuserinfo
+- -1 error handling in index.ts takes priority when specific error codes are defined in endpoints, fix that eventnually ok
+- add 7d expiring activation links

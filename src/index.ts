@@ -1,6 +1,6 @@
 import Elysia from "elysia";
 
-import { config } from "@server/config";
+import { config } from "@server/lib/config";
 import { runMigration } from "@server/db/migrate";
 
 import { accounts } from "@server/routes/accounts";
@@ -36,6 +36,9 @@ const GDPS = new Elysia({
         } catch {
             console.log("Body: <unreadable>");
         }
+    })
+    .onError({ as: "global" }, ({ code, error }) => {
+        return -1;
     })
 
     // routes

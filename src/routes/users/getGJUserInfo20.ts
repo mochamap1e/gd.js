@@ -1,24 +1,24 @@
 import { Elysia, t } from "elysia";
 import { eq } from "drizzle-orm";
 
-import { gd } from "@server/middleware";
+import { gd } from "@server/lib/middleware";
 
 import { db } from "@server/db/client";
 import { accounts } from "@server/db/schema";
 
 export const getGJUserInfo20 = new Elysia()
     .use(gd)
-    .post("/getGJUserInfo20.php", async ({ body }) => {
+    .post("/getGJUserInfo20.php", async ({ body, account }) => {
         try {
             const [account] = await db
                 .select()
                 .from(accounts)
-                .where(eq(accounts.account_id, body.targetAccountID));
+                .where(eq(accounts.id, body.targetAccountID));
             
             if (account) {
                 return [
                     1, account.username,
-                    2, account.account_id,
+                    2, account.id,
                     3, account.stars,
                     4, 0, // TEMP DEMON COUNT
                     6, 0, // TEMP GLOBAL LEADERBOARD RANK
@@ -29,7 +29,7 @@ export const getGJUserInfo20 = new Elysia()
                     13, account.secret_coins,
                     14, account.icon_type,
                     15, 0, // TEMP SPECIAL
-                    16, account.account_id,
+                    16, account.id,
                     17, account.user_coins,
                     18, account.message_state,
                     19, account.friends_state,
@@ -74,6 +74,7 @@ export const getGJUserInfo20 = new Elysia()
         }
     }, {
         secret: "Common",
+        optionalAccount: true,
         body: t.Object({
             targetAccountID: t.Numeric()
         })

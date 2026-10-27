@@ -1,7 +1,8 @@
 import { Elysia, t } from "elysia";
 import { eq } from "drizzle-orm";
 
-import { gd } from "@server/middleware";
+import { USERNAME_MIN_LENGTH, USERNAME_MAX_LENGTH } from "@server/constants";
+import { gd } from "@server/lib/middleware";
 
 import { db } from "@server/db/client";
 import { accounts } from "@server/db/schema";
@@ -17,7 +18,7 @@ export const loginGJAccount = new Elysia()
 
             if (account) {
                 if (account.password === body.gjp2) {
-                    return [account.account_id, account.account_id].join(",");
+                    return [account.id, account.id].join(",");
                 } else {
                     return -11;
                 }
@@ -30,7 +31,10 @@ export const loginGJAccount = new Elysia()
     }, {
         secret: "Account",
         body: t.Object({
-            userName: t.String(),
+            userName: t.String({
+                minLength: USERNAME_MIN_LENGTH,
+                maxLength: USERNAME_MAX_LENGTH
+            }),
             gjp2: t.String()
         })
     });

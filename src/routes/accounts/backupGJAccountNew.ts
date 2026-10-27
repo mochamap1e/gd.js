@@ -1,7 +1,7 @@
 import { Elysia, t } from "elysia";
 import { eq } from "drizzle-orm";
 
-import { gd } from "@server/middleware";
+import { gd } from "@server/lib/middleware";
 
 import { db } from "@server/db/client";
 import { accounts } from "@server/db/schema";
@@ -17,7 +17,7 @@ export const backupGJAccountNew = new Elysia()
                     save_data_game_version: body.gameVersion,
                     save_data_binary_version: body.binaryVersion
                 })
-                .where(eq(accounts.account_id, account.account_id));
+                .where(eq(accounts.id, account.id));
 
             return 1;
         } catch(error) {

@@ -1,4 +1,4 @@
-const expirationDelay = 12 * 60 * 60 * 1000; // 12 hours
+import { REGISTER_SESSION_LENGTH } from "@server/constants";
 
 export const registerSessions: RegisterSession[] = [];
 
@@ -11,7 +11,7 @@ setInterval(() => {
     const now = Date.now();
 
     for (let i = registerSessions.length - 1; i >= 0; i--) {
-        if (now - registerSessions[i]!.timestamp >= expirationDelay) {
+        if (now - registerSessions[i]!.timestamp >= REGISTER_SESSION_LENGTH) {
             registerSessions.splice(i, 1);
         }
     }

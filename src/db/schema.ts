@@ -1,17 +1,20 @@
-import { sql } from "drizzle-orm";
-import { sqliteTable, integer, text } from "drizzle-orm/sqlite-core";
+import { pgTable, customType, integer, text, boolean, timestamp } from "drizzle-orm/pg-core";
 
-const created_at = () => integer({ mode: "timestamp" }).notNull().default(sql`(unixepoch())`);
+const citext = customType<{ data: string }>({
+    dataType() {
+        return "citext";
+    }
+});
 
-export const accounts = sqliteTable("accounts", {
+export const accounts = pgTable("accounts", {
     // main stuff
-    account_id: integer().primaryKey({ autoIncrement: true }),
-    activated: integer({ mode: "boolean" }).notNull(),
+    id: integer().primaryKey().generatedByDefaultAsIdentity(),
+    activated: boolean().notNull(),
     activation_token: text().notNull().unique(),
-    username: text().notNull().unique(),
+    username: citext().notNull().unique(),
     password: text().notNull(),
-    email: text().notNull().unique(),
-    mod: integer().notNull().default(0),
+    email: citext().notNull().unique(),
+    custom: text(),
 
     // save data
     save_data: text(),
@@ -25,7 +28,7 @@ export const accounts = sqliteTable("accounts", {
     secret_coins: integer().notNull().default(0),
     user_coins: integer().notNull().default(0),
     creator_points: integer().notNull().default(0),
-    
+
     // icons
     color: integer().notNull().default(0),
     color2: integer().notNull().default(3),
@@ -42,14 +45,14 @@ export const accounts = sqliteTable("accounts", {
     explosion: integer().notNull().default(1),
     swing: integer().notNull().default(1),
     jetpack: integer().notNull().default(1),
-    glow: integer({ mode: "boolean" }).notNull().default(false),
+    glow: boolean().notNull().default(false),
 
     // social
-    message_state: integer().notNull().default(0),
+    message_state: integer().notNull().default(1),
     friends_state: integer().notNull().default(0),
     comment_history_state: integer().notNull().default(0),
-    group_state: integer().notNull().default(0),
-    
+    group_state: integer().notNull().default(1),
+
     // social media
     youtube: text(),
     twitter: text(),
@@ -59,5 +62,28 @@ export const accounts = sqliteTable("accounts", {
     tiktok: text(),
 
     // misc
-    created_at: created_at()
+    mod: integer().notNull().default(0),
+    created_at: timestamp().notNull().defaultNow()
+});
+
+export const levels = pgTable("levels", {
+    id: integer().primaryKey().generatedByDefaultAsIdentity(),
+    author: integer().notNull().references(() => accounts.id),
+    version: integer().notNull().default(1),
+
+    name: text().notNull(),
+    description: text(),
+    levelString: text().notNull(),
+
+    difficulty_denominator: integer().notNull().default(0),
+    difficulty_numerator: integer().notNull().default(0),
+    demon: boolean().notNull().default(false),
+    length: integer().notNull(),
+
+    downloads: integer().notNull().default(0),
+    likes: integer().notNull().default(0),
+    dislikes: integer().notNull().default(0),
+    stars: integer().notNull().default(0),
+
+    // finish later
 });

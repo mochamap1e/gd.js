@@ -11,6 +11,7 @@ export const config = new Conf({
     defaults: {
         host: "0.0.0.0",
         port: 3000,
+        db_url: "postgres://{username}:{password}@localhost:5432/gd",
         gdps_name: "Example GDPS",
         gdps_url: "https://yourgdps.com",
         cdn_url: "https://geometrydashfiles.b-cdn.net",

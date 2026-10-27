@@ -1,14 +1,9 @@
-import { mkdir } from "node:fs/promises";
-import { drizzle } from "drizzle-orm/bun-sqlite";
-import { Database } from "bun:sqlite";
+import { sql } from "drizzle-orm";
+import { drizzle } from "drizzle-orm/node-postgres";
 
-await mkdir("./data", { recursive: true });
+import { config } from "@server/lib/config";
 
-const sqlite = new Database("data/database.db");
+export const db = drizzle(config.get("db_url"));
 
-sqlite.run("PRAGMA foreign_keys = ON;");
-sqlite.run("PRAGMA journal_mode = WAL;");
-sqlite.run("PRAGMA synchronous = NORMAL;");
-sqlite.run("PRAGMA busy_timeout = 5000;");
-
-export const db = drizzle({ client: sqlite });
+// enable citext
+await db.execute(sql`CREATE EXTENSION IF NOT EXISTS citext;`);

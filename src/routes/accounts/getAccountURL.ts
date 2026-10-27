@@ -1,7 +1,7 @@
 import Elysia from "elysia";
 
-import { config } from "@server/config";
-import { gd } from "@server/middleware";
+import { config } from "@server/lib/config";
+import { gd } from "@server/lib/middleware";
 
 export const getAccountURL = new Elysia()
     .use(gd)
