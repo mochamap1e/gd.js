@@ -1,4 +1,4 @@
-import { pgTable, customType, integer, text, boolean, timestamp } from "drizzle-orm/pg-core";
+import { pgTable, customType, integer, text, boolean, timestamp, foreignKey } from "drizzle-orm/pg-core";
 
 const citext = customType<{ data: string }>({
     dataType() {
@@ -72,22 +72,27 @@ export const levels = pgTable("levels", {
     description: text(),
     version: integer().notNull().default(1),
     length: integer().notNull(),
-
-    author: integer().notNull().references(() => accounts.id),
+    audio_track: integer().notNull(),
+    auto: boolean().notNull(),
+    original: integer().notNull(),
+    two_player: boolean().notNull(),
+    song_id: integer().notNull(),
+    objects: integer().notNull(),
+    coins: integer().notNull(),
+    requested_stars: integer().notNull(),
+    unlisted: integer().notNull(),
+    ldm: boolean().notNull(),
+    level_string: text().notNull(),
+    editor_time: integer().notNull(),
+    editor_time_prev: integer().notNull(),
+    capacity_string: text().notNull(),
+    steps: integer().notNull(),
+    replay_string: text().notNull(),
+    timestamp: integer().notNull(),
     
-
-    
-    string: text().notNull(),
-
-    difficulty_denominator: integer().notNull().default(0),
-    difficulty_numerator: integer().notNull().default(0),
-    demon: boolean().notNull().default(false),
-    
-
-    downloads: integer().notNull().default(0),
-    likes: integer().notNull().default(0),
-    dislikes: integer().notNull().default(0),
-    stars: integer().notNull().default(0),
-
-    // finish later
-});
+}, (table) => [
+    foreignKey({
+        columns: [table.original],
+        foreignColumns: [table.id]
+    })
+]);
