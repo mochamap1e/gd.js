@@ -31,9 +31,9 @@ export const registerGJAccount = new Elysia()
     .post("/accounts/registerGJAccount.php", async ({ body }) => {
         const session = registerSessions.find(session => session.token === body.rsession);
 
-        //if (!session) { return -1; };
+        if (!session) { return -1; };
 
-        //deleteSession(session.token);
+        deleteSession(session.token);
 
         const { userName: username, password, email } = body;
         const token = generateHex(ACTIVATION_TOKEN_CHARS);

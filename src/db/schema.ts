@@ -7,13 +7,13 @@ const citext = customType<{ data: string }>({
 });
 
 export const accounts = pgTable("accounts", {
-    // main stuff
     id: integer().primaryKey().generatedByDefaultAsIdentity(),
-    activated: boolean().notNull(),
-    activation_token: text().notNull().unique(),
     username: citext().notNull().unique(),
     password: text().notNull(),
     email: citext().notNull().unique(),
+    activated: boolean().notNull(),
+    activation_token: text().notNull().unique(),
+    mod: integer().notNull().default(0),
     custom: text(),
 
     // save data
@@ -61,35 +61,48 @@ export const accounts = pgTable("accounts", {
     instagram: text(),
     tiktok: text(),
 
-    // misc
-    mod: integer().notNull().default(0),
+    // metadata
     created_at: timestamp().notNull().defaultNow()
 });
 
-export const levels = pgTable("levels", {
+export const levels = pgTable("levels", { // INCOMPLETE
     id: integer().primaryKey().generatedByDefaultAsIdentity(),
+    author: integer().references(() => accounts.id).notNull(),
+
+    // info
     name: text().notNull(),
     description: text(),
     version: integer().notNull().default(1),
     length: integer().notNull(),
-    audio_track: integer().notNull(),
-    auto: boolean().notNull(),
     original: integer().notNull(),
-    two_player: boolean().notNull(),
-    song_id: integer().notNull(),
-    objects: integer().notNull(),
     coins: integer().notNull(),
     requested_stars: integer().notNull(),
-    unlisted: integer().notNull(),
-    ldm: boolean().notNull(),
-    level_string: text().notNull(),
-    editor_time: integer().notNull(),
-    editor_time_prev: integer().notNull(),
-    capacity_string: text().notNull(),
-    steps: integer().notNull(),
-    replay_string: text().notNull(),
-    timestamp: integer().notNull(),
     
+    // editor info
+    level_string: text().notNull(),
+    objects: integer().notNull(),
+    steps: integer(),
+    editor_time: integer(),
+    editor_time_prev: integer(),
+    replay_string: text(),
+    build_stats: text(),
+    capacity_string: text(),
+    
+    // sound data
+    audio_track: integer().notNull(),
+    song_id: integer().notNull(),
+    song_ids: integer().array(),
+    sfx_ids: integer().array(),
+
+    // gameplay / config
+    auto: boolean().notNull(),
+    two_player: boolean().notNull(),
+    ldm: boolean().notNull(),
+    unlisted: integer().notNull(),
+    
+    // metadata
+    timestamp: integer(),
+    created_at: timestamp().notNull().defaultNow()
 }, (table) => [
     foreignKey({
         columns: [table.original],

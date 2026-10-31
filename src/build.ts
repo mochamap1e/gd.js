@@ -26,8 +26,4 @@ await build("bun-linux-x64-musl");
 await build("bun-linux-arm64");
 await build("bun-linux-arm64-musl");
 
-// mac for some reason
-await build("bun-darwin-x64");
-await build("bun-darwin-arm64");
-
 console.log("\u{2713} Done building.");
