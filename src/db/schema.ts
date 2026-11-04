@@ -72,9 +72,9 @@ export const levels = pgTable("levels", { // INCOMPLETE
     // info
     name: text().notNull(),
     description: text(),
-    version: integer().notNull().default(1),
+    version: integer().notNull(),
     length: integer().notNull(),
-    original: integer().notNull(),
+    original: integer(),
     coins: integer().notNull(),
     requested_stars: integer().notNull(),
     
@@ -85,14 +85,13 @@ export const levels = pgTable("levels", { // INCOMPLETE
     editor_time: integer(),
     editor_time_prev: integer(),
     replay_string: text(),
-    build_stats: text(),
     capacity_string: text(),
     
     // sound data
     audio_track: integer().notNull(),
     song_id: integer().notNull(),
-    song_ids: integer().array(),
-    sfx_ids: integer().array(),
+    song_ids: text(),
+    sfx_ids: text(),
 
     // gameplay / config
     auto: boolean().notNull(),

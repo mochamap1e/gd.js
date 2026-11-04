@@ -4,6 +4,7 @@ import { config } from "@server/lib/config";
 import { runMigration } from "@server/db/migrate";
 
 import { accounts } from "@server/routes/accounts";
+import { levels } from "@server/routes/levels";
 import { misc } from "@server/routes/misc";
 import { songs } from "@server/routes/songs";
 import { users } from "@server/routes/users";
@@ -43,6 +44,7 @@ const GDPS = new Elysia({
 
     // routes
     .use(accounts)
+    .use(levels)
     .use(misc)
     .use(songs)
     .use(users)
