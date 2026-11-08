@@ -2,3 +2,4 @@
 - -1 error handling in index.ts takes priority when specific error codes are defined in endpoints, fix that eventnually ok
 - add 7d expiring activation links (optional)
 - umm enforce like text limits for example level desc limit is there but like nothing else so far
+- add comment pagination

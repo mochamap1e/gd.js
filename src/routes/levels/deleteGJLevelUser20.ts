@@ -1,5 +1,5 @@
 import { Elysia, t } from "elysia";
-import { and, eq } from "drizzle-orm";
+import { eq, and } from "drizzle-orm";
 
 import { gd } from "@server/lib/middleware";
 

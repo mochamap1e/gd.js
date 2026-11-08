@@ -21,14 +21,10 @@ new Elysia({
     .onRequest(async ({ request }) => {
         const url = new URL(request.url);
         console.log("Requested:", request.method, url.pathname + url.search);
-        try {
-            //console.log("Body:", await request.clone().text());
-        } catch {
-            console.log("Body: <unreadable>");
-        }
     })
-    .onError({ as: "global" }, ({ code, error }) => {
-        return -1;
+    .onAfterHandle({ as: "global" }, ({ request, response }) => {
+        const url = new URL(request.url);
+        console.log("Responded:", request.method, url.pathname, "->", response);
     })
 
     // routes
