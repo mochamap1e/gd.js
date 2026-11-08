@@ -21,14 +21,10 @@ export const getGJUserInfo20 = new Elysia()
                     2, account.id,
                     3, account.stars,
                     4, 0, // TEMP DEMON COUNT
-                    6, 0, // TEMP GLOBAL LEADERBOARD RANK
                     8, account.creator_points,
-                    9, account.icon_id,
                     10, account.color,
                     11, account.color2,
                     13, account.secret_coins,
-                    14, account.icon_type,
-                    15, 0, // TEMP SPECIAL
                     16, account.id,
                     17, account.user_coins,
                     18, account.message_state,

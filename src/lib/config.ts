@@ -16,6 +16,7 @@ export const config = new Conf({
         gdps_url: "https://yourgdps.com",
         cdn_url: "https://geometrydashfiles.b-cdn.net",
         require_account_activation: false,
+        activation_message: "Your account has been successfully activated. You may now log in.",
         resend_api_key: "only_required_for_account_activation",
         resend_template_id: "account-activation",
         resend_email: "Example GDPS <noreply@yourgdps.com>"

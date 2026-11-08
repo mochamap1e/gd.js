@@ -108,3 +108,14 @@ export const levels = pgTable("levels", { // INCOMPLETE
         foreignColumns: [table.id]
     })
 ]);
+
+export const accountComments = pgTable("account_comments", {
+    id: integer().primaryKey().generatedByDefaultAsIdentity(),
+    author: integer().references(() => accounts.id).notNull(),
+    
+    comment: text().notNull(),
+    likes: integer().notNull().default(0),
+    dislikes: integer().notNull().default(0),
+
+    created_at: timestamp().notNull().defaultNow()
+});

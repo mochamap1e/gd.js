@@ -4,6 +4,7 @@ import { config } from "@server/lib/config";
 import { runMigration } from "@server/db/migrate";
 
 import { accounts } from "@server/routes/accounts";
+import { comments } from "@server/routes/comments";
 import { levels } from "@server/routes/levels";
 import { misc } from "@server/routes/misc";
 import { songs } from "@server/routes/songs";
@@ -11,23 +12,11 @@ import { users } from "@server/routes/users";
 
 if (Bun.isStandaloneExecutable) { await runMigration(); }
 
-const GDPS = new Elysia({
+new Elysia({
     serve: {
         hostname: config.get("host")
     }
 })
-    // block requests with a user agent
-    .resolve(({ request, status }) => {
-        const url = new URL(request.url);
-        const hasUserAgent = ![null, ""].includes(request.headers.get("User-Agent"));
-
-        const excludedRoutes = ["/accounts/activate"];
-
-        if (hasUserAgent && !excludedRoutes.includes(url.pathname)) {
-            return status(403);
-        }
-    })
-
     // lifecycle
     .onRequest(async ({ request }) => {
         const url = new URL(request.url);
@@ -44,6 +33,7 @@ const GDPS = new Elysia({
 
     // routes
     .use(accounts)
+    .use(comments)
     .use(levels)
     .use(misc)
     .use(songs)
