@@ -2,7 +2,6 @@ import { Elysia, t } from "elysia";
 import { Resend } from "resend";
 import { eq } from "drizzle-orm";
 
-import { config } from "@server/lib/config";
 import {
     USERNAME_MIN_LENGTH,
     USERNAME_MAX_LENGTH,
@@ -11,6 +10,7 @@ import {
     REGISTER_SESSION_CHARS,
     ACTIVATION_TOKEN_CHARS
 } from "@server/constants";
+import { config } from "@server/lib/config";
 import { gd } from "@server/lib/middleware";
 
 import { db } from "@server/db/client";
@@ -73,7 +73,11 @@ export const registerGJAccount = new Elysia()
 
             if (error) {
                 console.error("Resend error:", error);
-                await db.delete(accounts).where(eq(accounts.username, username));
+                
+                await db
+                    .delete(accounts)
+                    .where(eq(accounts.username, username));
+
                 return -1;
             }
         }

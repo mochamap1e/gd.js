@@ -1,5 +1,6 @@
 import { Elysia, t } from "elysia";
 
+import { DESCRIPTION_MAX_LENGTH } from "@server/constants";
 import { gd } from "@server/lib/middleware";
 
 import { db } from "@server/db/client";
@@ -54,7 +55,7 @@ export const uploadGJLevel21 = new Elysia()
         body: t.Object({
             levelID: t.Numeric(),
             levelName: t.String(),
-            levelDesc: t.String(),
+            levelDesc: t.String({ maxLength: DESCRIPTION_MAX_LENGTH }),
             levelVersion: t.Numeric(),
             levelLength: t.Numeric(),
             audioTrack: t.Numeric(),

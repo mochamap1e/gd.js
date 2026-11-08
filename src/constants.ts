@@ -4,6 +4,7 @@ export const USERNAME_MIN_LENGTH = 3;
 export const USERNAME_MAX_LENGTH = 15;
 export const PASSWORD_MIN_LENGTH = 8;
 export const PASSWORD_MAX_LENGTH = 70;
+export const DESCRIPTION_MAX_LENGTH = 240; // 240 base64 chars = 180 chars
 export const REGISTER_SESSION_CHARS = 32;
 export const REGISTER_SESSION_LENGTH = 12 * 60 * 60 * 1000; // 12 hours
 export const ACTIVATION_TOKEN_CHARS = 32;
