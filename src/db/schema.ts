@@ -73,6 +73,7 @@ export const levels = pgTable("levels", { // INCOMPLETE
     name: text().notNull(),
     description: text(),
     version: integer().notNull(),
+    game_version: integer().notNull(),
     length: integer().notNull(),
     original: integer(),
     coins: integer().notNull(),

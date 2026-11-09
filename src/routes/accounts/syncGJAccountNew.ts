@@ -6,7 +6,7 @@ import { gd } from "@server/lib/middleware";
 import { db } from "@server/db/client";
 import { accounts } from "@server/db/schema";
 
-export const backupGJAccountNew = new Elysia()
+export const syncGJAccountNew = new Elysia()
     .use(gd)
     .post("/database/accounts/syncGJAccountNew.php", async ({ body, account }) => {
         try {
@@ -15,7 +15,7 @@ export const backupGJAccountNew = new Elysia()
                     account.save_data,
                     account.save_data_game_version,
                     account.save_data_binary_version
-                ].join(";");
+                ].join(";") + ";;;"; // add the rated lelvels and map pack stuff later
             } else {
                 return -1;
             }
