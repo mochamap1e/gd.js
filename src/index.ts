@@ -21,6 +21,9 @@ new Elysia({
     .onRequest(async ({ request }) => {
         const url = new URL(request.url);
         console.log("Requested:", request.method, url.pathname + url.search);
+        
+        const body = await request.body?.text();
+        console.log("Body:", body);
     })
     .onAfterHandle({ as: "global" }, ({ request, response }) => {
         const url = new URL(request.url);

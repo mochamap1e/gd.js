@@ -1,4 +1,4 @@
-// global
+// server
 
 export const USERNAME_MIN_LENGTH = 3;
 export const USERNAME_MAX_LENGTH = 15;
@@ -20,4 +20,4 @@ export const Secrets = {
 
 export const Salts = {
     GJP2: "mI29fmAnxgTs"
-}
+} as const;

@@ -32,7 +32,8 @@ export const accounts = pgTable("accounts", {
     // icons
     color: integer().notNull().default(0),
     color2: integer().notNull().default(3),
-    color3: integer().notNull().default(0),
+    glow_color: integer().notNull().default(0),
+    glow_enabled: boolean().notNull().default(false),
     icon_id: integer().notNull().default(1),
     icon_type: integer().notNull().default(0),
     icon: integer().notNull().default(1),
@@ -45,7 +46,6 @@ export const accounts = pgTable("accounts", {
     explosion: integer().notNull().default(1),
     swing: integer().notNull().default(1),
     jetpack: integer().notNull().default(1),
-    glow: boolean().notNull().default(false),
 
     // social
     message_state: integer().notNull().default(1),
