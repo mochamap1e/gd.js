@@ -13,6 +13,7 @@ export const uploadGJLevel21 = new Elysia()
             const [level] = await db
                 .insert(levels)
                 .values({
+                    game_version: body.gameVersion,
                     author: account.id,
                     name: body.levelName,
                     description: body.levelDesc,
@@ -53,6 +54,7 @@ export const uploadGJLevel21 = new Elysia()
         secret: "Common",
         requiresAccount: true,
         body: t.Object({
+            gameVersion: t.Numeric(),
             levelID: t.Numeric(),
             levelName: t.String(),
             levelDesc: t.String({ maxLength: DESCRIPTION_MAX_LENGTH }),
